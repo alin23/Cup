@@ -1,0 +1,17 @@
+<snippet>
+    <content><![CDATA[
+@getInitialProps: ({ store, query, res, req }) ->
+	isServer = req?
+	ctx = { isServer, store, query }
+
+    ${1}
+
+    await return {
+    	ctx
+    }
+
+]]></content>
+    <tabTrigger>gip</tabTrigger>
+    <description>getInitialProps</description>
+    <scope>source.coffee</scope>
+</snippet>

@@ -1,0 +1,9 @@
+<snippet>
+    <content>
+        <![CDATA[console.tron.${1:logImportant}(${2:'${3:logging on line $TM_LINE_NUMBER}'})]]>
+    </content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>tlog</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.coffee, source.js</scope>
+</snippet>

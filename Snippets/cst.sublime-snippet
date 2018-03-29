@@ -1,0 +1,12 @@
+<snippet>
+    <content><![CDATA[
+constructor: (props) ->
+    super props
+    @state =
+        ${1}: ${2}
+
+]]></content>
+    <tabTrigger>cst</tabTrigger>
+    <description>React: constructor: (props) -> {...}</description>
+    <scope>source.coffee</scope>
+</snippet>

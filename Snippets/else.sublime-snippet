@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[else
+	${1:# ...}
+$0]]></content>
+    <tabTrigger>el</tabTrigger>
+    <description>Else</description>
+    <scope>source.coffee</scope>
+</snippet>

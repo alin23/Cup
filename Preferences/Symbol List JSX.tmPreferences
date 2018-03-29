@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List</string>
+	<key>scope</key>
+	<string>source.coffee entity.name.tag.begin.jsx
+</string>
+	<key>settings</key>
+	<dict>
+		<key>showInIndexedSymbolList</key>
+		<integer>1</integer>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolIndexTransformation</key>
+		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
+</string>
+		<key>symbolTransformation</key>
+		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
+</string>
+	</dict>
+	<key>uuid</key>
+	<string>62aaedda-7a9a-4a2e-9a4e-ee009eb2388c</string>
+</dict>
+</plist>

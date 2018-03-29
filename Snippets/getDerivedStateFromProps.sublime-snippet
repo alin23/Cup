@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+@getDerivedStateFromProps: (nextProps, prevState) ->
+    ${1:newState}
+    return ${2:newState}
+
+]]></content>
+    <tabTrigger>gdsfp</tabTrigger>
+    <description>React: getDerivedStateFromProps(nextProps, prevState)</description>
+    <scope>source.coffee</scope>
+</snippet>

@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[for ${1:${2:k}, ${3:v}} of ${4:object}
+	${5:# ...}
+$0]]></content>
+    <tabTrigger>forof</tabTrigger>
+    <description>Loop Object</description>
+    <scope>source.coffee</scope>
+</snippet>

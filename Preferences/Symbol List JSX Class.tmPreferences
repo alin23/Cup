@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List</string>
+	<key>scope</key>
+	<string>source.coffee string.quoted.double.class.jsx, source.coffee string.quoted.class.jsx
+</string>
+	<key>settings</key>
+	<dict>
+		<key>showInIndexedSymbolList</key>
+		<integer>1</integer>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolIndexTransformation</key>
+		<string>s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row)(-reverse)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g; s/[\s\n]+/ /g; s/(['"])\s*(.*?)\s*\1/className: $2/g;
+</string>
+		<key>symbolTransformation</key>
+		<string>s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row)(-reverse)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g; s/[\s\n]+/ /g; s/(['"])\s*(.*?)\s*\1/className: $2/g;
+</string>
+	</dict>
+	<key>uuid</key>
+	<string>9153fc85-3e5e-468d-b810-f59bc9b827ba</string>
+</dict>
+</plist>

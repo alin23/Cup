@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+getSnapshotBeforeUpdate: (prevProps, prevState) ->
+    ${1:snapshot}
+    return ${2:snapshot}
+
+]]></content>
+    <tabTrigger>gsbu</tabTrigger>
+    <description>React: getSnapshotBeforeUpdate(prevProps, prevState)</description>
+    <scope>source.coffee</scope>
+</snippet>

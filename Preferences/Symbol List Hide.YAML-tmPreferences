@@ -1,0 +1,8 @@
+# [PackageDev] target_format: plist, ext: tmPreferences
+name: Symbol List
+scope: >
+    source.coffee meta.selector.css,
+    source.coffee entity.other.attribute-name.class.css
+settings:
+  showInIndexedSymbolList: 0
+uuid: 4204a91b-e96a-4a28-8789-0c386a6c53c6

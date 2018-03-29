@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+switch ${1:object}
+	when ${2:value}
+		${3:# ...}
+	$4
+$0]]></content>
+    <tabTrigger>swi</tabTrigger>
+    <description>Switch</description>
+    <scope>source.coffee</scope>
+</snippet>

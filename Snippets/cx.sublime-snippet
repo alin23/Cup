@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+cx(
+    $1: $2
+)
+]]></content>
+    <tabTrigger>cx</tabTrigger>
+    <description>React: cx({ ... })</description>
+    <scope>source.coffee</scope>
+</snippet>

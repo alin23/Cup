@@ -1,0 +1,13 @@
+# [PackageDev] target_format: plist, ext: tmPreferences
+name: Symbol List
+scope: >
+  source.coffee meta.function.arrow.coffee entity.name.function.coffee,
+  source.coffee meta.function.json.arrow.coffee entity.name.function.coffee
+settings:
+  showInSymbolList: 1
+  showInIndexedSymbolList: 1
+  symbolTransformation: >
+    s/.+/function $0/g;
+  symbolIndexTransformation: >
+    s/.+/function $0/g;
+uuid: a5f4bbfb-99e9-44ec-8e18-602e431c2b9c

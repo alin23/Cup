@@ -1,0 +1,6 @@
+<snippet>
+    <content><![CDATA[${1/^.*?([\w_]+).*$/\L$1/} = require ${2:'${1:sys}'}$3]]></content>
+    <tabTrigger>req</tabTrigger>
+    <description>Require</description>
+    <scope>source.coffee</scope>
+</snippet>

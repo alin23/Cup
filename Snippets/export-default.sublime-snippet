@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+export default (${1:}) ->
+	${2:return}
+]]></content>
+    <tabTrigger>expd</tabTrigger>
+    <description>Export Default Function</description>
+    <scope>source.coffee</scope>
+</snippet>

@@ -1,0 +1,8 @@
+<snippet>
+    <content>
+        <![CDATA[${SELECTION/\{###(.+)###\}/$1/g}]]>
+    </content>
+    <!-- Hit `jc` in any JS document to get a JSX comment -->
+    <tabTrigger>juc</tabTrigger>
+    <scope>meta.jsx.coffee</scope>
+</snippet>

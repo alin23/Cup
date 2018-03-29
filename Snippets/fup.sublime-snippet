@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+forceUpdate(${1:callback})
+]]></content>
+    <tabTrigger>fup</tabTrigger>
+    <description>React: forceUpdate(...)</description>
+    <scope>source.coffee</scope>
+</snippet>

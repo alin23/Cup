@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[class ${1:Name} extends ${2:SuperClass}
+	${3:constructor: ${4:(${5:arguments}) }->
+		${6:# ...}}
+	$7
+$0]]></content>
+    <tabTrigger>clx</tabTrigger>
+    <description>Class (extension)</description>
+    <scope>source.coffee</scope>
+</snippet>

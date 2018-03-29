@@ -1,0 +1,55 @@
+[
+    {
+        "command": "coffeescript_sort_imports",
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "keys": ["super+option+i"]
+    },
+    {
+        "keys": ["option+c", "option+s"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "check_syntax"
+    },
+    {
+        "keys": ["option+c", "option+r"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "run_script"
+    },
+    {
+        "keys": ["option+c", "option+t"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "run_cake_task"
+    },
+    {
+        "keys": ["option+c", "option+c"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile"
+    },
+    {
+        "keys": ["option+c", "option+d"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-p" }
+    },
+    {
+        "keys": ["option+c", "option+x"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-t" }
+    },
+    {
+        "keys": ["option+c", "option+n"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-n" }
+    },
+    {
+        "keys": ["option+c", "option+w"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "toggle_watch"
+    },
+    {
+        "keys": ["option+c", "option+z"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "toggle_output_panel"
+    }
+]

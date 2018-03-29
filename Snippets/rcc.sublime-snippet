@@ -1,0 +1,20 @@
+<snippet>
+    <content><![CDATA[
+import React from 'react'
+
+class ${1} extends React.Component
+    constructor: (props) ->
+        super props
+        @state =
+            ${3}: ${4}
+
+    render: ->
+        <div>${2}</div>
+
+export default ${1}
+
+]]></content>
+    <tabTrigger>rcc</tabTrigger>
+    <description>React: component skeleton with constructor</description>
+    <scope>source.coffee</scope>
+</snippet>

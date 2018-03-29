@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+componentWillUnmount: ->
+    ${1}
+
+]]></content>
+    <tabTrigger>cwun</tabTrigger>
+    <description>React: componentWillUnmount: -> ...</description>
+    <scope>source.coffee</scope>
+</snippet>

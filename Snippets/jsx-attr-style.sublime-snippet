@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[style={
+	${1:prop}: ${2:value}
+\}]]></content>
+    <tabTrigger>style</tabTrigger>
+    <description>JSX Style Attribute</description>
+    <scope>source.coffee meta.tag.attributes.jsx - entity</scope>
+</snippet>

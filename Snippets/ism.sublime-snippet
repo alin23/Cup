@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+isMounted()
+]]></content>
+    <tabTrigger>ism</tabTrigger>
+    <description>React: isMounted()</description>
+    <scope>source.coffee</scope>
+</snippet>

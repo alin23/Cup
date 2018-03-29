@@ -1,0 +1,55 @@
+[
+    {
+        "command": "coffeescript_sort_imports",
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "keys": ["ctrl+alt+i"]
+    },
+    {
+        "keys": ["alt+c", "alt+s"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "check_syntax"
+    },
+    {
+        "keys": ["alt+c", "alt+r"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "run_script"
+    },
+    {
+        "keys": ["alt+c", "alt+t"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "run_cake_task"
+    },
+    {
+        "keys": ["alt+c", "alt+c"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile"
+    },
+    {
+        "keys": ["alt+c", "alt+d"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-p" }
+    },
+    {
+        "keys": ["alt+c", "alt+x"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-t" }
+    },
+    {
+        "keys": ["alt+c", "alt+n"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "compile_and_display",
+        "args": { "opt": "-n" }
+    },
+    {
+        "keys": ["alt+c", "alt+w"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "toggle_watch"
+    },
+    {
+        "keys": ["alt+c", "alt+z"],
+        "context": [{ "key": "selector", "operand": "source.coffee, source.litcoffee", "operator": "equal" }],
+        "command": "toggle_output_panel"
+    }
+]

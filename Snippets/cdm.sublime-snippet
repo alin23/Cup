@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+componentDidMount: ->
+    ${1}
+
+]]></content>
+    <tabTrigger>cdm</tabTrigger>
+    <description>React: componentDidMount: -> ...</description>
+    <scope>source.coffee</scope>
+</snippet>

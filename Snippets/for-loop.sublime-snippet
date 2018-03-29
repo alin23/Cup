@@ -1,0 +1,7 @@
+<snippet>
+    <content><![CDATA[for ${1:x} in ${2:array}
+    ${3:# do something with x}]]></content>
+    <tabTrigger>for</tabTrigger>
+    <description>Array Loop</description>
+    <scope>source.coffee</scope>
+</snippet>

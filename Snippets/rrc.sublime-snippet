@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+ReactDOM.render ${1:<$2 />}, ${3:document.body}${4:, ${5:callback}}
+]]></content>
+    <tabTrigger>rrc</tabTrigger>
+    <description>React: render(component, container, [callback])</description>
+    <scope>source.coffee</scope>
+</snippet>

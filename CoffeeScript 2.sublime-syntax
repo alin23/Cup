@@ -1,0 +1,1508 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: CoffeeScript 2
+comment: "CoffeeScript Syntax: version 2"
+file_extensions:
+  - coffee
+  - Cakefile
+  - coffee.erb
+  - cson
+  - cjsx
+scope: source.coffee
+
+variables:
+  identifier: '[_$a-zA-Z][$\w]*'
+  indentation: '[\t ]*'
+
+contexts:
+  main:
+    - include: core
+
+  prototype:
+    - include: comments
+
+  core:
+    - include: literal-function-labels
+    - include: literal-arrow-function-labels
+    - include: literal-labels
+    - include: literal-for
+    # - include: literal-switch
+    - include: expression
+    - include: literal-punctuation
+
+  expression:
+    - include: merge-conflicts
+    - include: literal-regexp             # before operators and keywords to avoid ambiguities
+    - include: literal-jsx
+    # - include: es7-decorators
+    - include: support-class
+    - include: support-other
+
+    - include: literal-function
+    - include: literal-arrow-function
+    - include: literal-prototype          # after literal-function, which includes some prototype strings
+
+    - include: literal-keywords
+
+    - include: literal-method
+    - include: literal-module
+    - include: literal-class
+    # - include: flowtype-declaration
+
+    - include: literal-number               # after literal-method since short methods can be numbers
+    - include: styled-jsx
+
+    - include: literal-template-string
+    - include: literal-string
+    - include: literal-language-constant
+    - include: literal-language-variable
+
+    - include: literal-constructor
+    - include: literal-method-call
+    - include: literal-function-call
+
+    - include: brackets
+
+    - include: literal-operators
+    - include: literal-variable
+
+  round-brackets:
+    - match: \(
+      scope: meta.brace.round.begin.coffee
+      push:
+        - meta_scope: meta.group.braces.round.coffee
+        - match: \)
+          scope: meta.brace.round.end.coffee
+          pop: true
+        - include: expression
+
+  square-brackets:
+    - match: \[
+      scope: meta.brace.square.begin.coffee
+      push:
+        - meta_scope: meta.group.braces.square.coffee
+        - match: \]
+          scope: meta.brace.square.end.coffee
+          pop: true
+        - include: expression
+
+  curly-brackets:
+    - match: '{'
+      scope: meta.brace.curly.begin.coffee
+      push:
+        - meta_scope: meta.group.braces.curly.coffee
+        - match: '}'
+          scope: meta.brace.curly.end.coffee
+          pop: true
+        - include: main
+
+  brackets:
+    - include: round-brackets
+    - include: square-brackets
+    - include: curly-brackets
+
+  comments:
+    - match: \{\#\#\#
+      scope: punctuation.definition.comment.begin.coffee
+      push:
+        - meta_scope: comment.block.jsx
+        - match: \#\#\#\}
+          scope: punctuation.definition.comment.end.coffee
+          pop: true
+
+    - match: \#\#\#
+      scope: punctuation.definition.comment.begin.coffee
+      push:
+        - meta_scope: comment.block.coffee
+        - match: \#\#\#
+          scope: punctuation.definition.comment.end.coffee
+          pop: true
+
+    - match: (?><!--|-->)
+      scope: comment.block.html.coffee
+      captures:
+        0: punctuation.definition.comment.coffee
+
+    - match: \#
+      scope: punctuation.definition.comment.coffee
+      push:
+        - meta_scope: comment.line.double-slash.coffee
+        - match: $\n?
+          pop: true
+
+    - match: ^#!
+      scope: punctuation.definition.comment.coffee
+      push:
+        - meta_scope: comment.line.shebang.coffee
+        - match: $
+          pop: true
+
+  function-declaration-parameters:
+    - match: \(
+      scope: punctuation.definition.parameters.begin.coffee
+      push:
+        # - include: flowtype-annotation
+        - match: (?<!\.)\.\.\.
+          scope: keyword.operator.spread.coffee
+        - match: (?<!\.)({{identifier}})(?=[, \)])
+          scope: variable.parameter.function.coffee
+        - include: expression
+        - match: ','
+          scope: punctuation.separator.parameter.function.coffee
+        - match: \)
+          scope: punctuation.definition.parameters.end.coffee
+          pop: true
+
+  literal-module:
+    - match: (?<!\.)\b(?>import|export|default|from|as)\b
+      scope: keyword.operator.module.coffee
+
+  literal-class:
+    # e.g. class MyClass extends OtherClass {  }
+    - match: (?<!\.)(?=\b(class|interface)\b)
+      push: class_def
+
+  class_def:
+    - meta_scope: meta.class.coffee
+    - match: \b(class|interface)\b
+      captures:
+        1: storage.type.class.coffee
+        2: storage.type.interface.flowtype.coffee
+      scope: storage.type.class.coffee
+      push: [class_body, class_extends, class_name]
+    - match: (?<=})
+      pop: true
+
+  class_name:
+    - match: ({{identifier}})
+      scope: entity.name.class.coffee
+      set:
+        # - include: flowtype-polymorph
+        - match: (?=\s*(?>extends|>|{))
+          pop: true
+        - include: expression
+
+  class_extends:
+    - match: \b(extends)\b
+      scope: storage.type.extends.coffee
+      set:
+        - match: (?={)
+          pop: true
+        - include: expression
+        # - include: flowtype-polymorph
+    - match: (?={)
+      pop: true
+
+  class_body:
+    - match: '{'
+      scope: punctuation.definition.class.body.begin.coffee
+      set:
+        - match: '}'
+          scope: punctuation.definition.class.body.end.coffee
+          pop: true
+        # - include: es7-decorators
+        - include: class-properties
+        - include: class-method-definition
+        - include: class-method-storage
+        - include: brackets
+
+  # flowtype-declaration:
+  #   - match: (?<!\.)\b(declare)\b
+  #     scope: support.type.declare.flowtype.coffee
+
+  #   - match: (?<!\.)\b(type)\b(?=\s*[_$a-zA-Z])
+  #     scope: support.type.type.flowtype.coffee
+  #     push:
+  #       - meta_scope: meta.type.flowtype.coffee
+  #       - match: (?=\s*(;|from))
+  #         pop: true
+  #       - include: flowtype-tokens
+
+  #   - match: (?<!\.)\b(type)\b(?=\s*{)
+  #     scope: support.type.type.flowtype.coffee
+  #     push:
+  #       - meta_scope: meta.type.flowtype.coffee
+  #       - match: (?<=})
+  #         pop: true
+  #       - include: flowtype-brackets
+  #       - include: flowtype-polymorph
+  #       - match: ([_$a-zA-Z][$\w]*)
+  #         scope: entity.name.type.coffee
+
+  class-method-definition:
+    # e,g. @@iterator(): Iterator<[K, V]>;
+    # e.g. static (o: ?void): {[key: any]: any};
+    # e.g. return<R>(value: R): { done: true, value: R };
+    # e.g. <T: Object>(o: T): T;
+    - match: (@@[_$a-zA-Z][$\w]*|@|return)(?=\s*[<(])|(?=\s*<)
+      scope: keyword.operator.flowtype.coffee
+      push:
+        - meta_scope: meta.short-method.flowtype.coffee
+        - match: (?=\s*[;{])
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+        # - include: flowtype-annotation
+        - include: curly-brackets
+
+    # In objects and flow annotations it can't be assumed that a start quote
+    # or start square-bracket is for a method - it may be a computed property.
+    # For multi-line quoted short methods and computed property methods, only
+    # the polymorphism constraints and parameters are matched.
+    - match: (?<=[]"''])\s*(?=[<(])
+      push:
+        - meta_scope: meta.class-method.computed.coffee
+        - match: (?=\s*[;{])
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+        # - include: flowtype-annotation
+        - include: curly-brackets
+
+    - match: >-
+        (?x)
+          ((?>@))
+          ((?>get|set)\s+)
+          (?>
+            ((')((?>[^'\\]|\\.)*)('))|
+            ((")((?>[^"\\]|\\.)*)("))|
+            (([_$a-zA-Z][$\w]*|\d+))
+          )(?=\s*[<(])
+      captures:
+        1: storage.modifier.coffee
+        2: storage.type.coffee
+        3: string.quoted.coffee
+        4: punctuation.definition.string.begin.coffee
+        5: entity.name.function.coffee
+        6: punctuation.definition.string.end.coffee
+        7: string.quoted.coffee
+        8: punctuation.definition.string.begin.coffee
+        9: entity.name.function.coffee
+        10: punctuation.definition.string.end.coffee
+        11: string.unquoted.coffee
+        12: entity.name.function.coffee
+      push:
+        - meta_scope: meta.class-accessor.coffee
+        - match: (?=\s*[;{])
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+        # - include: flowtype-annotation
+        - include: curly-brackets
+
+    - match: >-
+        (?x)
+          (?>
+            ((?>@))
+            ((')((?>[^'\\]|\\.)*)('))|
+            ((")((?>[^"\\]|\\.)*)("))|
+            (([_$a-zA-Z][$\w]*|\d+))
+          )(?=\s*[<(])
+      captures:
+        1: storage.modifier.coffee
+        2: string.quoted.coffee
+        3: punctuation.definition.string.begin.coffee
+        4: entity.name.function.coffee
+        5: punctuation.definition.string.end.coffee
+        6: string.quoted.double.coffee
+        7: punctuation.definition.string.begin.coffee
+        8: entity.name.function.coffee
+        9: punctuation.definition.string.end.coffee
+        10: string.unquoted.coffee
+        11: entity.name.function.coffee
+      push:
+        - meta_scope: meta.class-method.coffee
+        - match: (?=\s*[;{])
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+        # - include: flowtype-annotation
+        - include: curly-brackets
+
+  class-method-storage:
+    - match: (?<!\.)\b(?>@|declare)\b
+      scope: storage.modifier.coffee
+
+    - match: (?<!\.)\b(async)\b
+      scope: storage.type.coffee
+
+    - match: (?<!\.)\b(get|set)\b(?!\s*\()
+      scope: storage.type.coffee
+
+    - match: \*
+      scope: keyword.generator.asterisk.coffee
+
+  class-properties:
+    - match: ([_$a-zA-Z][$\w]*)(?=\s*[:=])
+      scope: variable.other.property.coffee
+      push:
+        - meta_scope: meta.class.property.coffee
+        - match: (?=\s*[;}])
+          pop: true
+        # - include: flowtype-annotation
+        - include: expression
+
+    # getter/setter
+    - match: >-
+        (?x)
+          \b(?:(@)\s+)?
+          (get|set)\s+
+          ({{identifier}}|\d+)\s*
+          (?=(\((?>(?>[^()]+)|\g<-1>)*\))(?>\s|\#.*\#)*\{)
+      captures:
+        1: storage.type.coffee
+        2: storage.type.accessor.coffee
+        3: entity.name.accessor.coffee
+      push:
+        - meta_scope: meta.accessor.coffee
+        - match: (?<=\))
+          pop: true
+        - include: function-declaration-parameters
+
+  literal-prototype:
+    # e.g. Sound.prototype = {  } when extending an object
+    - match: ({{identifier}})(\.)(prototype)\s*(=)\s*
+      scope: meta.prototype.declaration.coffee
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.language.prototype.coffee
+        4: keyword.operator.assignment.coffee
+
+    # e.g. Sound.prototype
+    - match: ({{identifier}})(\.)(prototype)\b
+      scope: meta.prototype.access.coffee
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.language.prototype.coffee
+
+  literal-function:
+    # e.g. function play(arg1, arg2) {  }
+    # e.g. play = function(arg1, arg2) {  }
+    - match: >-
+        (?x)
+          (?:({{identifier}})\s*(=)\s*)?
+          (?:(async)\s+)?
+          (function)(?>\s*(\*)|(?=[\s(<]))
+          \s*({{identifier}})?
+      captures:
+        1: entity.name.function.coffee
+        2: keyword.operator.assignment.coffee
+        3: storage.type.coffee
+        4: storage.type.function.coffee
+        5: keyword.generator.asterisk.coffee
+        6: entity.name.function.coffee
+      push:
+        - meta_scope: meta.function.coffee
+        - match: (?<=\))
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+
+    # e.g. Sound.prototype.play = function(arg1, arg2) {  }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)(prototype)
+          (\.)({{identifier}})
+          \s*(=)
+          \s*(?:(async)\s+)?
+          \s*(function)(?>\s*(\*)|(?=[\s(<]))
+          \s*({{identifier}})?\s*
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.language.prototype.coffee
+        4: keyword.operator.accessor.coffee
+        5: entity.name.function.coffee
+        6: keyword.operator.assignment.coffee
+        7: storage.type.coffee
+        8: storage.type.function.coffee
+        9: keyword.generator.asterisk.coffee
+        10: entity.name.function.coffee
+      push:
+        - meta_scope: meta.function.prototype.coffee
+        - match: (?<=\))
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+
+    # e.g. Sound.play = function(arg1, arg2) {  }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)({{identifier}})
+          \s*(=)
+          \s*(?:(async)\s+)?
+          \s*(function)(?>\s*(\*)|(?=[\s(<]))
+          \s*({{identifier}})?\s*
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: entity.name.function.coffee
+        4: keyword.operator.assignment.coffee
+        5: storage.type.coffee
+        6: storage.type.function.coffee
+        7: keyword.generator.asterisk.coffee
+        8: entity.name.function.coffee
+      push:
+        - meta_scope: meta.function.static.coffee
+        - match: (?<=\))
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+
+  literal-function-labels:
+    # e.g. play: function(arg1, arg2) {  }
+    # e.g. "play": function(arg1, arg2) {  }
+    - match: >-
+        (?x)
+        (?>
+          ((')((?>[^'\\]|\\.)*)('))|
+          ((")((?>[^"\\]|\\.)*)("))|
+          (({{identifier}}|\d+))
+        )
+        \s*(:)
+        \s*(?:\b(async)\s+)?
+        \s*(function)(?>\s*(\*)|(?=[\s(<]))
+        \s*({{identifier}})?
+      captures:
+        1: string.quoted.coffee
+        2: punctuation.definition.string.begin.coffee
+        3: entity.name.function.coffee
+        4: punctuation.definition.string.end.coffee
+        5: string.quoted.double.coffee
+        6: punctuation.definition.string.begin.coffee
+        7: entity.name.function.coffee
+        8: punctuation.definition.string.end.coffee
+        9: string.unquoted.coffee
+        10: entity.name.function.coffee
+        11: punctuation.separator.key-value.coffee
+        12: storage.type.coffee
+        13: storage.type.function.coffee
+        14: keyword.generator.asterisk.coffee
+        15: entity.name.function.coffee
+      push:
+        - meta_scope: meta.function.json.coffee
+        - match: (?<=\))
+          pop: true
+        # - include: flowtype-polymorph
+        - include: function-declaration-parameters
+
+  literal-arrow-function:
+    # e.g. (args) => { }
+    # e.g. play = (args) => { }
+    - match: >-
+        (?x)
+          (@)?(?:({{identifier}})\s*([=:])\s*)?
+          (?:\b(async)\s+)?
+          (?=(\((?>(?>[^()]+)|\g<-1>)*\))\s*([=\-]>))
+      captures:
+        1: storage.modifier.coffee
+        2: entity.name.function.coffee
+        3: keyword.operator.assignment.coffee
+        4: storage.type.coffee
+      push:
+        - meta_scope: meta.function.arrow.coffee
+        - match: (?<=\))\s*([=\-]>)
+          captures:
+            1: storage.type.function.arrow.coffee
+          pop: true
+        - include: function-declaration-parameters
+
+    # e.g. arg => { }
+    # e.g. play = arg => { }
+    - match: >-
+        (?x)
+          (?:({{identifier}})\s*([=:])\s*)?
+          (?:(async)\s+)?
+          \b(?<!\.)({{identifier}})\s*([=\-]>)
+      scope: meta.function.arrow.coffee
+      captures:
+        1: entity.name.function.coffee
+        2: keyword.operator.assignment.coffee
+        3: storage.type.coffee
+        4: entity.name.function.coffee
+        5: storage.type.function.arrow.coffee
+
+    # e.g. => { }
+    # e.g. play = => { }
+    - match: >-
+        (?x)
+          (?:({{identifier}})\s*([=:])\s*)?
+          (?:(async)\s+)?
+          \s*([=\-]>)
+      scope: meta.function.arrow.coffee
+      captures:
+        1: entity.name.function.coffee
+        2: keyword.operator.assignment.coffee
+        3: entity.name.function.coffee
+        4: storage.type.function.arrow.coffee
+
+    # e.g. Sound.prototype.play = (args) => { }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)(prototype)
+          (\.)({{identifier}})
+          \s*([=:])
+          \s*(async)?
+          \s*(?=(\((?>(?>[^()]+)|\g<-1>)*\))\s*([=\-]>))
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.language.prototype.coffee
+        4: keyword.operator.accessor.coffee
+        5: entity.name.function.coffee
+        6: keyword.operator.assignment.coffee
+        7: storage.type.coffee
+      push:
+        - meta_scope: meta.prototype.function.arrow.coffee
+        - match: (?<=\))\s*([=\-]>)
+          captures:
+            1: storage.type.function.arrow.coffee
+          pop: true
+        - include: function-declaration-parameters
+
+    # e.g. Sound.prototype.play = arg => { }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)(prototype)
+          (\.)({{identifier}})
+          \s*([=:])
+          \s*(async)?
+          \s*\b({{identifier}})\s*([=\-]>)
+      scope: meta.prototype.function.arrow.coffee
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.language.prototype.coffee
+        4: keyword.operator.accessor.coffee
+        5: entity.name.function.coffee
+        6: keyword.operator.assignment.coffee
+        7: storage.type.coffee
+        8: variable.parameter.function.coffee
+        9: storage.type.function.arrow.coffee
+
+    # e.g. Sound.play = (args) => { }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)({{identifier}})
+          \s*([=:])
+          \s*(async)?
+          \s*(?=(\((?>(?>[^()]+)|\g<-1>)*\))\s*([=\-]>))
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: entity.name.function.coffee
+        4: keyword.operator.assignment.coffee
+        5: storage.type.coffee
+      push:
+        - meta_scope: meta.function.static.arrow.coffee
+        - match: (?<=\))\s*([=-]>)
+          captures:
+            1: storage.type.function.arrow.coffee
+          pop: true
+        - include: function-declaration-parameters
+
+    # e.g. Sound.play = arg => { }
+    - match: >-
+        (?x)
+          (\b_?[A-Z][$\w]*)?
+          (\.)({{identifier}})
+          \s*([=:])
+          \s*(async)?
+          \s*\b({{identifier}})\s*([=\-]>)
+      scope: meta.function.static.arrow.coffee
+      captures:
+        1: entity.name.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: entity.name.function.coffee
+        4: keyword.operator.assignment.coffee
+        5: storage.type.coffee
+        6: variable.parameter.function.coffee
+        7: storage.type.function.arrow.coffee
+
+  literal-arrow-function-labels:
+    # e.g. play: (args) => { }
+    # e.g. "play": (args) => { }
+    - match: >-
+        (?x)
+          (?>
+            ((')((?>[^'\\]|\\.)*)('))|
+            ((")((?>[^"\\]|\\.)*)("))|
+            (({{identifier}}|\d+))
+          )
+          \s*(:)
+          \s*(?:\b(async)\s+)?
+          \s*(?=(\((?>(?>[^()]+)|\g<-1>)*\))\s*([=\-]>))
+      captures:
+        1: string.quoted.coffee
+        2: punctuation.definition.string.begin.coffee
+        3: entity.name.function.coffee
+        4: punctuation.definition.string.end.coffee
+        5: string.quoted.double.coffee
+        6: punctuation.definition.string.begin.coffee
+        7: entity.name.function.coffee
+        8: punctuation.definition.string.end.coffee
+        9: string.unquoted.coffee
+        10: entity.name.function.coffee
+        11: punctuation.separator.key-value.coffee
+        12: storage.type.coffee
+      push:
+        - meta_scope: meta.function.json.arrow.coffee
+        - match: (?<=\))\s*([=-]>)
+          captures:
+            1: storage.type.function.arrow.coffee
+          pop: true
+        - include: function-declaration-parameters
+
+    # e.g. play: arg => { }
+    # e.g. "play": arg => { }
+    - match: >-
+        (?x)
+          (?>
+            ((')((?>[^'\\]|\\.)*)('))|
+            ((")((?>[^"\\]|\\.)*)("))|
+            (({{identifier}}|\d+))
+          )
+          \s*(:)
+          \s*(?:\b(async)\s+)?
+          \s*\b({{identifier}})\s*([=\-]>)
+      scope: meta.function.json.arrow.coffee
+      captures:
+        1: string.quoted.coffee
+        2: punctuation.definition.string.begin.coffee
+        3: entity.name.function.coffee
+        4: punctuation.definition.string.end.coffee
+        5: string.quoted.double.coffee
+        6: punctuation.definition.string.begin.coffee
+        7: entity.name.function.coffee
+        8: punctuation.definition.string.end.coffee
+        9: string.unquoted.coffee
+        10: entity.name.function.coffee
+        11: punctuation.separator.key-value.coffee
+        12: storage.type.coffee
+        13: variable.parameter.function.coffee
+        14: storage.type.function.arrow.coffee
+
+  literal-function-call:
+    - match: ({{identifier}})\s*(\(\s*\))
+      scope: meta.function-call.without-arguments.coffee
+      captures:
+        1: variable.function.coffee
+        2: meta.group.braces.round.function.arguments.coffee
+
+    - match: ({{identifier}})\s*(?=\()
+      scope: meta.function-call.with-arguments.coffee
+      captures:
+        1: variable.function.coffee
+
+    - match: ({{identifier}})\s*(?=`)
+      scope: meta.function-call.tagged-template.coffee
+      captures:
+        1: variable.function.coffee
+
+  literal-method-call:
+    - match: >-
+        (?x)
+          (?:(?<=\.)|\b)
+          ([A-Z][$\w]*)\s*(\.)
+          ({{identifier}})\s*
+          (\(\s*\))
+      scope: meta.function-call.static.without-arguments.coffee
+      captures:
+        1: variable.other.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.function.coffee
+        4: meta.group.braces.round.function.arguments.coffee
+
+    - match: >-
+        (?x)
+          (?:(?<=\.)|\b)
+          ([A-Z][$\w]*)\s*(\.)
+          ({{identifier}})\s*
+          (?=\()
+      scope: meta.function-call.static.with-arguments.coffee
+      captures:
+        1: variable.other.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.function.coffee
+
+    - match: >-
+        (?x)
+          (?<=\.)
+          ({{identifier}})\s*
+          (\(\s*\))
+      scope: meta.function-call.method.without-arguments.coffee
+      captures:
+        1: variable.function.coffee
+        2: meta.group.braces.round.function.arguments.coffee
+
+    - match: >-
+        (?x)
+          (?<=\.)
+          ({{identifier}})\s*
+          (?=\()
+      scope: meta.function-call.method.with-arguments.coffee
+      captures:
+        1: variable.function.coffee
+
+  literal-language-variable:
+    - match: (@)({{identifier}})
+      scope: meta.property.class.coffee
+      captures:
+        1: variable.language.this.coffee
+        2: variable.language.member.coffee
+
+    - match: (?<!(?<!\.\.)\.)\b(arguments)\b
+      scope: variable.language.arguments.coffee
+
+    - match: (?<!(?<!\.\.)\.)\b(super)\b
+      scope: variable.language.super.coffee
+
+    - match: (?<!(?<!\.\.)\.)(\b(this)\b)
+      scope: variable.language.this.coffee
+
+    - match: (?<!(?<!\.\.)\.)\b(self)\b
+      scope: variable.language.self.coffee
+
+    - match: (?<=\.)(__proto__)\b
+      scope: variable.language.proto.coffee
+
+    - match: (?<=\.)(constructor)\b
+      scope: variable.language.constructor.coffee
+
+    - match: (?<=\.)(prototype)\b
+      scope: variable.language.prototype.coffee
+
+  literal-language-constant:
+    - match: (?<!\.)\b(true)\b
+      scope: constant.language.boolean.true.coffee
+
+    - match: (?<!\.)\b(false)\b
+      scope: constant.language.boolean.false.coffee
+
+    - match: (?<!\.)\b(null)\b
+      scope: constant.language.null.coffee
+
+    - match: (?<!\.)\b(undefined)\b
+      scope: constant.language.undefined.coffee
+
+    - match: (?<!\.)\b(NaN)\b
+      scope: constant.language.nan.coffee
+
+  literal-constructor:
+    - match: (new)\s+(?=[_$a-zA-Z][$\w.]*)
+      captures:
+        1: keyword.operator.new.coffee
+      push:
+        - meta_scope: meta.instance.constructor.coffee
+        - match: (?![_$a-zA-Z][$\w.]*)
+          pop: true
+        - include: support-class
+        - include: support-other
+        - match: ([_$a-zA-Z][$\w.]*\.)?({{identifier}})
+          captures:
+            2: variable.function.constructor.coffee
+
+  literal-keyword-storage:
+    - match: (?<!\.)\b(?>const|let|var)\b
+      scope: storage.type.coffee
+
+  literal-keywords:
+    - include: literal-keyword-storage
+
+    - match: (?<!\.)\b((?>await|yield))\b(?:\s*(\*))?
+      captures:
+        1: keyword.control.flow.coffee
+        2: keyword.generator.asterisk.coffee
+
+    - match: (?<!\.)\b(return)\b
+      scope: keyword.control.flow.coffee
+
+    - match: (?<!\.)\b(?>if|else|then|unless)\b
+      scope: keyword.control.conditional.coffee
+
+    - match: (?<!\.)\b(?>catch|finally|throw|try)\b
+      scope: keyword.control.trycatch.coffee
+
+    - match: (?<!\.)\b(?>for|switch|when|break|continue|do|goto|while|case|default)\b
+      scope: keyword.control.loop.coffee
+
+    - match: (?<!\.)\b(?>enum|public|package|private|interface|protected)\b
+      scope: keyword.other.reserved.coffee
+
+    - match: (?<!\.)\b(debugger)\b
+      scope: keyword.other.coffee
+
+  literal-for:
+    - match: (?<!\.)\b(for)\b
+      scope: keyword.control.loop.coffee
+      push:
+        - meta_scope: meta.for.coffee
+        - match: \n
+          scope: meta.brace.round.end.coffee
+          pop: true
+        - match: \s
+          scope: meta.brace.round.begin.coffee
+          push:
+            - match: (?=\))
+              pop: true
+            - include: literal-operators
+            - include: literal-keyword-storage
+            - include: expression
+            - include: literal-punctuation
+
+  # literal-switch:
+  #   - match: (?<!\.)\b(switch)\b
+  #     scope: keyword.control.switch.coffee
+  #     push:
+  #       - meta_scope: meta.switch.coffee
+  #       - match: \}
+  #         scope: meta.brace.curly.end.coffee
+  #         pop: true
+  #       - include: round-brackets
+  #       - match: \{
+  #         scope: meta.brace.curly.begin.coffee
+  #         push:
+  #           - match: (?=})
+  #             pop: true
+  #           - match: (?<!\.)\b(when|default)\b
+  #             captures:
+  #               1: keyword.control.switch.coffee
+  #             push:
+  #               - match: (?=:)
+  #                 pop: true
+  #               - include: expression
+  #           - include: main
+
+  literal-operators:
+    - match: (?<!\.)\b(?>delete|instanceof|in|new|of|typeof|void|with|from)\b
+      scope: keyword.operator.coffee
+
+    - match: >-
+        (?x)
+          not\b | # logical-not     right-to-left   right
+          \band\b    | # logical-and     left-to-right   both
+          \bor\b  | # logical-or      left-to-right   both
+      scope: keyword.operator.logical.coffee
+
+    - match: >-
+        (?x)
+          =(?!=)| # assignment      right-to-left   both
+      scope: keyword.operator.assignment.coffee
+
+    - match: >-
+        (?x)
+          %=   | # assignment      right-to-left   both
+          &=   | # assignment      right-to-left   both
+          \*=  | # assignment      right-to-left   both
+          \+=  | # assignment      right-to-left   both
+          -=   | # assignment      right-to-left   both
+          /=   | # assignment      right-to-left   both
+          \^=  | # assignment      right-to-left   both
+          \|=  | # assignment      right-to-left   both
+          <<=  | # assignment      right-to-left   both
+          >>=  | # assignment      right-to-left   both
+          >>>= | # assignment      right-to-left   both
+      scope: keyword.operator.assignment.augmented.coffee
+
+    - match: >-
+        (?x)
+          ~    | # bitwise-not     right-to-left   right
+          <<   | # bitwise-shift   left-to-right   both
+          >>>  | # bitwise-shift   left-to-right   both
+          >>   | # bitwise-shift   left-to-right   both
+          &    | # bitwise-and     left-to-right   both
+          \^   | # bitwise-xor     left-to-right   both
+          \|     # bitwise-or      left-to-right   both
+      scope: keyword.operator.bitwise.coffee
+
+    - match: >-
+        (?x)
+          <=   | # relational      left-to-right   both
+          >=   | # relational      left-to-right   both
+          <    | # relational      left-to-right   both
+          >      # relational      left-to-right   both
+      scope: keyword.operator.relational.coffee
+
+    - match: >-
+        (?x)
+          isnt\b  | # equality        left-to-right   both
+          is\b  | # equality        left-to-right   both
+          ==   | # equality        left-to-right   both
+          !=     # equality        left-to-right   both
+      scope: keyword.operator.comparison.coffee
+
+    - match: >-
+        (?x)
+          --   | # decrement       n/a             right-or-left
+          \+\+ | # increment       n/a             right-or-left
+          \%\% | # safe modulus    left-to-right   both
+          //   | # floor           left-to-right   both
+          \*\* | # pow             left-to-right   both
+          /    | # division        left-to-right   both
+          %    | # modulus         left-to-right   both
+          \*   | # multiplication  left-to-right   both
+          \+   | # addition        left-to-right   both
+          -      # subtraction     left-to-right   both
+      scope: keyword.operator.arithmetic.coffee
+
+    - match: (?<!\.)\.\.\.
+      scope: keyword.operator.spread.coffee
+
+    - match: (?<!\.)\.\.
+      scope: keyword.operator.range.coffee
+
+    - match: \.
+      scope: keyword.operator.accessor.coffee
+
+    - match: \?
+      scope: keyword.operator.existential.coffee
+
+  literal-labels:
+    - match: >-
+        (?x)
+          (?<!\?)(?<!\?\s)(?=(?>
+            ((')((?>[^'\\]|\\.)*)('))|
+            ((")((?>[^"\\]|\\.)*)("))
+          )\s*:)
+      push:
+        - match: ':'
+          scope: punctuation.separator.key-value.coffee
+          pop: true
+        - include: literal-template-string
+        - include: literal-string
+
+    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!\s*->)
+      scope: constant.other.object.key.coffee
+      captures:
+        1: string.unquoted.label.coffee
+        2: punctuation.separator.key-value.coffee
+
+  literal-number:
+    - match: (?i)(?:\B[-+]|\b)0x[0-9a-f]*\.(\B|\b[0-9]+)
+      scope: invalid.illegal.numeric.hex.coffee
+
+    - match: (?:\B[-+]|\b)0[0-9]+\.(\B|\b[0-9]+)
+      scope: invalid.illegal.numeric.octal.coffee
+
+    - match: >-
+        (?xi)
+          (?:\B[-+])?
+          (?:
+            \b0b[0-1]*|                 # binary
+            \b0o[0-7]*|                 # octal
+            \b0x[0-9a-f]*|              # hex
+            (
+              \B\.[0-9]+|               # e.g. .999
+              \b[0-9]+(\.(?:[^\.])[0-9]*)?       # e.g. 999.999, 999. or 999
+            )(e[-+]?[0-9]+)?            # e.g. e+123, E-123
+          )
+      scope: constant.numeric.coffee
+
+    - match: (?:\B[-+]|\b)(Infinity)\b
+      scope: constant.language.infinity.coffee
+
+  literal-punctuation:
+    - match: ;
+      scope: punctuation.terminator.statement.coffee
+
+    - match: ','
+      scope: meta.delimiter.comma.coffee
+
+  literal-regexp:
+    # ignore ++, -- since they're uncommon, distinguishing them is not possible in sublime text, see:
+    # http://stackoverflow.com/questions/5519596/when-parsing-javascript-what-determines-the-meaning-of-a-slash
+    - match: >-
+        (?x)
+          (?<=
+            \.|\(|,|{|}|\[|;|<|>|<=|>=|==|!=|===|!==|\+|-|\*|%|\+\+|--|<<|>>|>>>|&|\||\^|!|~|&&|\|\||\?|:|=|\+=|-=|\*=|%=|<<=|>>=|>>>=|&=|\|=|\^=|/|/=|
+            \Wnew|\Wdelete|\Wvoid|\Wtypeof|\Winstanceof|\Win|\Wdo|\Wreturn|\Wcase|\Wthrow|\Wyield
+            ^new|^delete|^void|^typeof|^instanceof|^in|^do|^return|^case|^throw|^yield|^
+          )\s*
+          (/)
+          (?!/|\*|$)
+      captures:
+        1: punctuation.definition.string.begin.coffee
+      push:
+        - meta_scope: string.regexp.coffee
+        - match: (/)([gimy]*)
+          captures:
+            1: punctuation.definition.string.end.coffee
+            2: keyword.other.coffee
+          pop: true
+        - include: scope:source.regexp.coffee
+
+  literal-string:
+    - match: (')
+      scope: punctuation.definition.string.quoted.begin.coffee
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.coffee
+        - match: \1
+          scope: punctuation.definition.string.quoted.end.coffee
+          pop: true
+        - include: string-content
+
+  literal-template-string:
+    - match: '"'
+      scope: punctuation.definition.template.begin.coffee
+      push: template-string-body
+
+  template-string-body:
+    - meta_include_prototype: false
+    - meta_scope: string.interpolated.coffee
+    - match: '\\"'
+      scope: constant.character.escape.coffee
+    - match: '"'
+      scope: punctuation.definition.template.end.coffee
+      pop: true
+    - match: \#{
+      scope: keyword.other.substitution.begin.coffee
+      set:
+        - match: '}'
+          scope: keyword.other.substitution.end.coffee
+          set: template-string-body
+        - include: expression
+    - include: string-content
+
+  string-content:
+    # https://mathiasbynens.be/notes/javascript-escapes
+    - match: \\\s*\n
+      scope: constant.character.escape.newline.coffee
+
+    - match: \\([1-7][0-7]{0,2}|[0-7]{2,3}|[bfnrtv0'"\\]|x\h{2}|u\{\h+\}|u\h{4})
+      scope: constant.character.escape.coffee
+
+  literal-variable:
+    # e.g. CONSTANT
+    - match: _*?[A-Z][_$\dA-Z]*\b
+      scope: variable.other.constant.coffee
+
+    # e.g. Class.property
+    - match: \b([A-Z][$\w]*)\s*(\.)({{identifier}})
+      scope: meta.property.class.coffee
+      captures:
+        1: variable.other.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.other.property.static.coffee
+
+    # e.g. Class
+    - match: \b([A-Z][$\w]*)\b
+      scope: variable.other.class.coffee
+
+    # e.g. obj.property
+    - match: (?<!\.)({{identifier}})\s*(?=[\[\.])
+      scope: variable.other.object.coffee
+      captures:
+        1: variable.other.object.coffee
+
+    # e.g. obj.property
+    - match: (?<=\.)\s*({{identifier}})
+      scope: meta.property.member.coffee
+      captures:
+        1: variable.other.member.coffee
+
+    - match: '{{identifier}}'
+      scope: variable.other.readwrite.coffee
+
+  support-class:
+    - match: (?<!\.)\b(Array|ArrayBuffer|Boolean|DataView|Date|Float32Array|Float64Array|Function|Infinity|Int16Array|Int32Array|Int8Array|JSON|Map|Math|NaN|Number|Object|Promise|Proxy|Reflect|RegExp|Set|String|Symbol|System|TypeError|Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|WeakMap|WeakSet)\b
+      scope: support.class.builtin.coffee
+
+    - match: (?<!\.)\b((?>Eval|Range|Reference|Syntax|Type|URI)?Error)\b
+      scope: support.class.error.coffee
+
+    - match: \b(?>Buffer)\b
+      scope: support.class.node.coffee
+
+  support-other:
+    - match: (?<!\.)\b(constructor|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|eval|hasOwnProperty|isFinite|isNaN|isPrototypeOf|parseFloat|parseInt|propertyIsEnumerable|toLocaleString|toString|unescape|valueOf)\b
+      scope: support.function.builtin.coffee
+
+    - match: (?<!\.)\b(clearImmediate|clearInterval|clearTimeout|require|setImmediate|setInterval|setTimeout)\b
+      scope: support.function.node.coffee
+
+    - match: (?<!\.)\b(?>document|window)\b
+      scope: support.type.object.dom.coffee
+
+    - match: (?<!\.)\b(?>global|GLOBAL|root|__dirname|__filename)\b
+      scope: support.type.object.node.coffee
+
+    - match: (?<!\.)\b(console)(?:(\.)(assert|count|dir|error|group|groupCollapsed|groupEnd|info|log|profile|profileEnd|table|time|timeEnd|trace|warn))?\b
+      captures:
+        1: support.type.object.console.coffee
+        2: keyword.operator.accessor.coffee
+        3: support.function.console.coffee
+
+    - match: (?<!\.)\b(process)(?:(\.)(?:(arch|argv|config|env|execArgv|execPath|exitCode|mainModule|pid|platform|stderr|stdin|stdout|title|version|versions)|(abort|chdir|cwd|exit|getgid|getgroups|getuid|hrtime|initgroups|kill|memoryUsage|nextTick|setgid|setgroups|setuid|umask|uptime)))?\b
+      captures:
+        1: support.type.object.process.coffee
+        2: keyword.operator.accessor.coffee
+        3: support.type.object.process.coffee
+        4: support.function.process.coffee
+
+    - match: (?<!\.)\b(exports|module(?:(\.)(children|exports|filename|id|loaded|parent)))?\b
+      captures:
+        1: support.type.object.module.coffee
+        2: keyword.operator.accessor.coffee
+        3: support.type.object.module.coffee
+
+    - match: '{{'
+      push:
+        - meta_scope: meta.tag.mustache.coffee
+        - match: '}}'
+          pop: true
+
+  literal-jsx:
+    - match: (?<=\(|\{|\[|,|&&|\|\||\?|:|=|[=\-]>|\Wreturn|^return|^)(?=\s*<[_$a-zA-Z])
+      push:
+        - meta_content_scope: meta.jsx.coffee
+        - match: (?<=/>|>)
+          pop: true
+        - include: jsx-tag-start
+
+  styled-jsx:
+    - match: \"#{}
+      scope: punctuation.section.style.begin.jsx
+      push: Packages/CSS3/CSS3.sublime-syntax
+      with_prototype:
+        - match: \"
+          scope: punctuation.section.style.end.jsx
+          pop: true
+        - match: :global\(
+          scope: keyword.other.global.begin.coffee
+          push:
+            - match: \)
+              scope: keyword.other.global.end.coffee
+              pop: true
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          push:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              pop: true
+            - include: expression
+
+
+  jsx-attribute-assignment:
+    - match: =
+      scope: keyword.operator.assignment.jsx
+
+  jsx-attribute-class:
+    - match: (\s*)(className)
+      captures:
+        1: meta.tag.attributes.jsx
+        2: meta.tag.attributes.jsx entity.other.attribute-name.class.jsx
+
+  jsx-attribute-id:
+    - match: (\s*)(id)
+      captures:
+        1: meta.tag.attributes.jsx
+        2: meta.tag.attributes.jsx entity.other.attribute-name.id.jsx
+
+  jsx-attribute-name:
+    - match: (\s*)([_$a-zA-Z][-$\w]*)
+      captures:
+        1: meta.tag.attributes.jsx
+        2: meta.tag.attributes.jsx entity.other.attribute-name.jsx
+
+  jsx-whitespace:
+    - match: (\s*)
+      scope: meta.tag.attributes.jsx
+
+  jsx-attributes:
+    - include: jsx-attribute-class
+    - include: jsx-attribute-id
+    - include: jsx-attribute-name
+    - include: jsx-attribute-assignment
+    - include: jsx-string-quoted-double
+    - include: jsx-string-quoted-double-classname
+    - include: jsx-string-quoted-double-id
+    - include: jsx-string-quoted-classname
+    - include: jsx-string-quoted-id
+    - include: jsx-string-quoted
+    - include: jsx-evaluated-code
+    - include: jsx-whitespace
+
+  jsx-entities:
+    - match: '&(?:[a-zA-Z0-9]+|#\d+|#x\h+);'
+      scope: constant.character.entity.jsx
+    - match: '&\S*;'
+      scope: invalid.illegal.bad-ampersand.jsx
+
+  jsx-evaluated-code:
+    - match: \{
+      scope: punctuation.section.embedded.begin.jsx
+      push:
+        - meta_scope: meta.embedded.expression.jsx
+        - match: \}
+          scope: punctuation.section.embedded.end.jsx
+          pop: true
+        - include: styled-jsx
+        - include: jsx-tag-start
+        - include: expression
+
+  jsx-string-quoted-classname:
+    - match: (?<=className=)(')
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.class.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-string-quoted-id:
+    - match: (?<=id=)(')
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.id.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-string-quoted:
+    - match: (')
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-string-quoted-double:
+    - match: (")
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.double.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-string-quoted-double-classname:
+    - match: (?<=className=)(")
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.double.class.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-string-quoted-double-id:
+    - match: (?<=id=)(")
+      scope: punctuation.definition.string.begin.jsx
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.double.id.jsx
+        - match: \1
+          scope: punctuation.definition.string.end.jsx
+          pop: true
+        - include: jsx-entities
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          set:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              set: template-string-body
+            - include: expression
+
+  jsx-tag-end:
+    - match: (\s*)(>)
+      captures:
+        1: meta.tag.attributes.jsx
+        2: meta.tag.attributes.jsx punctuation.definition.tag.end.jsx
+      push:
+        - meta_include_prototype: false
+        - match: (?=</)
+          pop: true
+        - include: jsx-tag-start
+        - include: jsx-evaluated-code
+        - include: jsx-entities
+
+  jsx-tag-start:
+    - match: (<)([_$a-zA-Z][-$:.\w]*[$\w]*)(\s*)
+      captures:
+        1: meta.tag.jsx punctuation.definition.tag.begin.jsx
+        2: meta.tag.jsx entity.name.tag.begin.jsx
+        3: meta.tag.attributes.jsx
+      push:
+        - match: (</)(\2)(>)|(/>)
+          captures:
+            1: meta.tag.jsx punctuation.definition.tag.begin.jsx
+            2: meta.tag.jsx entity.name.tag.closed.jsx
+            3: meta.tag.jsx punctuation.definition.tag.end.jsx meta.tag.closed.jsx
+            4: meta.tag.jsx punctuation.definition.tag.end.jsx meta.tag.closed.jsx
+          pop: true
+        - include: jsx-tag-end
+        - include: jsx-attributes
+
+    - match: '<'
+      scope: invalid.illegal.tag.incomplete.jsx
+
+  # https://github.com/wycats/javascript-decorators
+  # es7-decorators:
+  #   - match: (@)([_$a-zA-Z][$\w]*)\b
+  #     scope: tag.decorator.coffee
+  #     captures:
+  #       1: punctuation.definition.tag.coffee
+  #       2: entity.name.tag.coffee
+
+  merge-conflicts:
+    - match: ^([<]{7})\s(.+)$
+      captures:
+        1: invalid.illegal.conflict-marker.merge-into.coffee
+        2: invalid.illegal.string.coffee
+    - match: ^([=|]{7})$
+      captures:
+        1: invalid.illegal.conflict-marker.separator.coffee
+    - match: ^([>]{7})\s(.+)$
+      captures:
+        1: invalid.illegal.conflict-marker.other-commit.coffee
+        2: invalid.illegal.string.coffee
+
+  # flowtype-polymorph:
+  #   # http://flowtype.org/blog/2015/03/12/Bounded-Polymorphism.html
+  #   - match: '<'
+  #     scope: punctuation.section.flowtype.begin.coffee
+  #     push:
+  #     - meta_scope: meta.flowtype.polymorph.coffee
+  #     - match: '>'
+  #       scope: punctuation.section.flowtype.end.coffee
+  #       pop: true
+  #     - include: flowtype-tokens
+
+  # flowtype-annotation:
+  #   - match: (?:(\?)\s*)?(:)
+  #     captures:
+  #       1: keyword.operator.flowtype.optional.coffee
+  #       2: keyword.operator.flowtype.annotation.coffee
+  #     push:
+  #       - meta_scope: meta.flowtype.annotation.coffee
+  #       - include: flowtype-tokens
+  #       - match: (?=\S)
+  #         pop: true
+
+  # flowtype-brackets:
+  #   - match: '{'
+  #     scope: punctuation.section.flowtype.begin.coffee
+  #     push:
+  #     - match: '}'
+  #       scope:  punctuation.section.flowtype.end.coffee
+  #       pop: true
+  #     - include: flowtype-tokens
+
+  # flowtype-identifier:
+  #   - include: support-class
+
+  #   - match: \b(?:any|bool|boolean|mixed|number|string|void)\b
+  #     scope: constant.other.primitve.flowtype.coffee
+
+  #   - match: '[_$a-zA-Z][$\w]*'
+  #     scope: variable.other.flowtype.coffee
+
+  #   - match: \?
+  #     scope: keyword.operator.flowtype.optional.coffee
+
+  # flowtype-tokens:
+  #   - match: (?<=[:?|&=])(?=\s*{)
+  #     push:
+  #       - match: (?<=})
+  #         pop: true
+  #       - include: flowtype-brackets
+
+  #   - match: \s*([|&])\s*
+  #     scope: meta.flowtype.set.coffee
+  #     captures:
+  #       1: keyword.operator.flowtype.other.coffee
+
+  #   - match: '[*:?&|.]|\.\.\.|\b(typeof)\b'
+  #     scope: keyword.operator.flowtype.other.coffee
+
+  #   - match: '<'
+  #     scope: punctuation.section.flowtype.begin.coffee
+  #     push:
+  #     - match: '>'
+  #       scope: punctuation.section.flowtype.end.coffee
+  #       pop: true
+  #     - include: flowtype-tokens
+
+  #   - match: \[
+  #     scope: punctuation.section.flowtype.begin.coffee
+  #     push:
+  #     - match: \]
+  #       scope: punctuation.section.flowtype.end.coffee
+  #       pop: true
+  #     - include: flowtype-tokens
+
+  #   - match: \(
+  #     scope: punctuation.section.flowtype.begin.coffee
+  #     push:
+  #     - match: \)
+  #       scope: punctuation.section.flowtype.end.coffee
+  #       pop: true
+  #     - include: flowtype-tokens
+
+  #   - match: '=>'
+  #     scope: keyword.operator.flowtype.coffee
+  #     push:
+  #     - meta_scope: meta.flowtype.function.coffee
+  #     - match: (?<=}|[_$a-zA-Z])
+  #       pop: true
+  #     - include: flowtype-brackets
+  #     - include: flowtype-identifier
+  #     - include: comments
+
+  #   - include: flowtype-identifier
+    - include: literal-string
+    - include: comments

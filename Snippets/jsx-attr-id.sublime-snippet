@@ -1,0 +1,6 @@
+<snippet>
+    <content><![CDATA[id='${1:}']]></content>
+    <tabTrigger>id</tabTrigger>
+    <description>JSX Attribute ID</description>
+    <scope>source.coffee meta.tag.attributes.jsx - entity</scope>
+</snippet>

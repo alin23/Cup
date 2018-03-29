@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+propTypes:
+    ${1}: React.PropTypes.${2:string}
+]]></content>
+    <tabTrigger>pt</tabTrigger>
+    <description>React: propTypes { ... }</description>
+    <scope>source.coffee</scope>
+</snippet>

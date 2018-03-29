@@ -1,0 +1,12 @@
+# [PackageDev] target_format: plist, ext: tmPreferences
+name: Symbol List
+scope: >
+  source.coffee entity.name.class.coffee
+settings:
+  showInSymbolList: 1
+  showInIndexedSymbolList: 1
+  symbolTransformation: >
+    s/.+/class $0/g;
+  symbolIndexTransformation: >
+    s/.+/class $0/g;
+uuid: 553409d8-bcae-4c7f-bff3-17473ec463f1

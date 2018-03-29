@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+shouldComponentUpdate: (nextProps, nextState) ->
+    ${1}
+
+]]></content>
+    <tabTrigger>scu</tabTrigger>
+    <description>React: shouldComponentUpdate: (np, ns) -> ...</description>
+    <scope>source.coffee</scope>
+</snippet>

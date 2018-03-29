@@ -1,0 +1,15 @@
+<snippet>
+    <content><![CDATA[
+import React from 'react'
+
+class ${1} extends React.Component
+    render: ->
+        <div>${2}</div>
+
+export default ${1}
+
+]]></content>
+    <tabTrigger>rc</tabTrigger>
+    <description>React: component skeleton</description>
+    <scope>source.coffee</scope>
+</snippet>

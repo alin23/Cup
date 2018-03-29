@@ -1,0 +1,85 @@
+[
+	{
+		"keys": ["="],
+		"command": "cup_insert_snippet",
+		"args": { "name": "Packages/Cup/Snippets/jsx-attr.sublime-snippet" },
+		"context": [
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{
+				"operand": "source.coffee meta.tag.attributes.jsx - entity",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": ["#"],
+		"command": "insert_snippet",
+		"args": { "contents": "#{ ${1:$SELECTION} }$0" },
+		"context": [
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{
+				"operand":
+					"source.coffee string.quoted.double.coffee, source.coffee string.interpolated.coffee, source.coffee string.quoted.double.jsx",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+	{
+		"keys": [";"],
+		"command": "cup_insert_snippet",
+		"args": { "name": "Packages/Cup/Snippets/jsx-attr-style.sublime-snippet" },
+		"context": [
+			{
+				"operand": "source.coffee meta.tag.attributes.jsx - entity",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"operator": "equal",
+				"operand": true,
+				"key": "setting.auto_id_class"
+			}
+		]
+	},
+	{
+		"keys": ["#"],
+		"command": "cup_insert_snippet",
+		"args": { "name": "Packages/Cup/Snippets/jsx-attr-id.sublime-snippet" },
+		"context": [
+			{
+				"operand": "source.coffee meta.tag.attributes.jsx - entity",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"operator": "equal",
+				"operand": true,
+				"key": "setting.auto_id_class"
+			}
+		]
+	},
+	{
+		"keys": ["."],
+		"command": "cup_insert_snippet",
+		"args": { "name": "Packages/Cup/Snippets/jsx-attr-class.sublime-snippet" },
+		"context": [
+			{
+				"operand": "source.coffee meta.tag.attributes.jsx - entity",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"operator": "equal",
+				"operand": true,
+				"key": "setting.auto_id_class"
+			}
+		]
+	}
+]
