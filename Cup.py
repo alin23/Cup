@@ -13,6 +13,7 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
     import_re = r'^import\s+[^\'"]+\s+from\s+[\'"][^\'"]+[\'"]$'
     sorter = os.path.join(os.path.dirname(__file__), 'sort.js')
     startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags = subprocess.STARTF_USESHOWWINDOW
     startupinfo.wShowWindow = subprocess.SW_HIDE
 
     def get_import_region(self):
