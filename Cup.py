@@ -8,13 +8,16 @@ import sublime_plugin
 
 sys.path.append(os.path.dirname(__file__))
 
+startupinfo = None
+if hasattr(subprocess, 'STARTUPINFO'):
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags = subprocess.STARTF_USESHOWWINDOW
+    startupinfo.wShowWindow = subprocess.SW_HIDE
+
 
 class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
     import_re = r'^import\s+[^\'"]+\s+from\s+[\'"][^\'"]+[\'"]$'
     sorter = os.path.join(os.path.dirname(__file__), 'sort.js')
-    startupinfo = subprocess.STARTUPINFO()
-    startupinfo.dwFlags = subprocess.STARTF_USESHOWWINDOW
-    startupinfo.wShowWindow = subprocess.SW_HIDE
 
     def get_import_region(self):
         import_regions = self.view.find_all(self.import_re, sublime.IGNORECASE)
@@ -31,7 +34,7 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
 
         with subprocess.Popen(
             cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE,
-            startupinfo=self.startupinfo
+            startupinfo=startupinfo
         ) as coffee:
             try:
                 out, err = coffee.communicate(code.encode(), timeout=10)
