@@ -1,0 +1,11 @@
+{
+    "variants": [
+        {
+            "name": "Run",
+            "cmd": ["coffee", "$file"],
+        },
+    ],
+    "cmd": ["coffee", "-c", "$file"],
+    "selector": "source.coffee, source.litcoffee",
+    "syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+}
