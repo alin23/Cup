@@ -33,8 +33,11 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
         code = self.view.substr(import_region)
 
         with subprocess.Popen(
-            cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE,
-            startupinfo=startupinfo
+            cmd,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            startupinfo=startupinfo,
         ) as coffee:
             try:
                 out, err = coffee.communicate(code.encode(), timeout=10)
