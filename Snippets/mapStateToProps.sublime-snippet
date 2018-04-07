@@ -4,7 +4,7 @@ mapStateToProps = (state) ->
     ${1}: state.${2:reducer}.${1}
 
 ]]></content>
-    <tabTrigger>maps</tabTrigger>
+    <tabTrigger>msp</tabTrigger>
     <description>Redux: mapStateToProps = (state) -> ...</description>
     <scope>source.coffee</scope>
 </snippet>

@@ -4,7 +4,7 @@ mapDispatchToProps = (dispatch) ->
     ${1}: (${2}) -> dispatch(${3:Actions}.${1}(${2}))
 
 ]]></content>
-    <tabTrigger>mapd</tabTrigger>
+    <tabTrigger>mdp</tabTrigger>
     <description>Redux: mapDispatchToProps = (dispatch) -> ...</description>
     <scope>source.coffee</scope>
 </snippet>
