@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+mapDispatchToProps = (dispatch) ->
+    ${1}: (${2}) -> dispatch(${3:Actions}.${1}(${2}))
+
+]]></content>
+    <tabTrigger>mapd</tabTrigger>
+    <description>Redux: mapDispatchToProps = (dispatch) -> ...</description>
+    <scope>source.coffee</scope>
+</snippet>
