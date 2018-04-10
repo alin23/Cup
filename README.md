@@ -1,6 +1,6 @@
 # Cup
+### _For your daily dose of CoffeeScript_
 
-A Sublime Text 3 plugin to enhance your CoffeeScript 2 experience.
 
 ## Features
 
