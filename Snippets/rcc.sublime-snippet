@@ -6,10 +6,17 @@ class ${1} extends React.Component
     constructor: (props) ->
         super props
         @state =
-            ${3}: ${4}
+            ${2}: ${3}
 
     render: ->
-        <div>${2}</div>
+        ${4:<${5:div}
+            className={ @props.className ? '' \}
+            id={ @props.id ? '' \}
+            style={
+                @props.style
+            \}>
+            ${6:}
+        </${5:div}>}
 
 export default ${1}
 
