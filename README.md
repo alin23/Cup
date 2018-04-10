@@ -1,6 +1,22 @@
 # Cup
 ### _For your daily dose of CoffeeScript_
 
+## Installation
+### As a repository within the packages directory
+
+Open a Terminal/Console and run the following commands, replacing `PACKAGE_PATH` with the path corresponding to your OS above.
+
+    cd PACKAGE_PATH
+    git clone https://github.com/alin23/Cup
+
+Sublime stores packages in the following locations:
+
+    Unix: ~/.config/sublime-text-3/packages
+    Mac: ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
+    Win: %APPDATA%\Sublime Text 3\Packages
+
+### With Package Control
+[Waiting for approval](https://github.com/wbond/package_control_channel/pull/7024)
 
 ## Features
 
@@ -22,3 +38,8 @@
     - Styled JSX CSS selectors
 ![Symbols](Screenshots/symbols.gif)
 - Working Build Systems
+
+
+## Thanks
+[Logan Howlett](https://github.com/aponxi)
+[περιπέτεια](https://github.com/monstersintokyo)
