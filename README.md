@@ -41,5 +41,5 @@ Sublime stores packages in the following locations:
 
 
 ## Thanks
-[Logan Howlett](https://github.com/aponxi)
-[περιπέτεια](https://github.com/monstersintokyo)
+- [Logan Howlett](https://github.com/aponxi)
+- [περιπέτεια](https://github.com/monstersintokyo)
