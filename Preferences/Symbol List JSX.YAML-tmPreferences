@@ -6,9 +6,9 @@ settings:
   showInSymbolList: 1
   showInIndexedSymbolList: 1
   symbolTransformation: >
-    s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g;
+    s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|style|svg|table|tbody|td|th|thead|tr|ul|video)$//g;
     s/.+/<$0>/g;
   symbolIndexTransformation: >
-    s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g;
+    s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|style|svg|table|tbody|td|th|thead|tr|ul|video)$//g;
     s/.+/<$0>/g;
 uuid: 62aaedda-7a9a-4a2e-9a4e-ee009eb2388c

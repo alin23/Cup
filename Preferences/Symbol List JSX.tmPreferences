@@ -14,10 +14,10 @@
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolIndexTransformation</key>
-		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
+		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|style|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
 </string>
 		<key>symbolTransformation</key>
-		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
+		<string>s/^(a|aside|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|style|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
 </string>
 	</dict>
 	<key>uuid</key>
