@@ -1,12 +1,15 @@
 <snippet>
     <content><![CDATA[
-export default (props) ->
-    ${1:<${2:div}
+${1:Component} = (props) ->
+    ${2:<${3:div}
       className={ props.className ? '' \}
       id={ props.id ? '' \}
       style={ props.style \}>
-      ${3:}
-    </${2:div}>}
+      ${4:}
+    </${3:div}>}
+
+export default ${1:Component}
+
 ]]></content>
     <tabTrigger>rsc</tabTrigger>
     <description>React Stateless Component</description>

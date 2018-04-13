@@ -5,14 +5,19 @@
 	<key>name</key>
 	<string>Symbol List</string>
 	<key>scope</key>
-	<string>source.coffee entity.other.attribute-name.class.css, source.coffee entity.other.attribute-name.id.css
+	<string>source.coffee entity.other.attribute-name.class.css, source.coffee entity.other.attribute-name.id.css, source.coffee entity.other.attribute-name.class.stylus, source.coffee entity.other.attribute-name.id.stylus, source.coffee entity.other.attribute-name.class.sass, source.coffee entity.other.attribute-name.id.sass
 </string>
 	<key>settings</key>
 	<dict>
+		<key>showInIndexedReferenceList</key>
+		<integer>1</integer>
 		<key>showInIndexedSymbolList</key>
-		<integer>0</integer>
+		<integer>1</integer>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
+		<key>symbolIndexTransformation</key>
+		<string>s/\s+/ /g;
+</string>
 		<key>symbolTransformation</key>
 		<string>s/\s+/ /g; s/.+/css: $0/g;
 </string>

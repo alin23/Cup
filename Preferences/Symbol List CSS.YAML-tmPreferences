@@ -2,11 +2,18 @@
 name: Symbol List
 scope: >
     source.coffee entity.other.attribute-name.class.css,
-    source.coffee entity.other.attribute-name.id.css
+    source.coffee entity.other.attribute-name.id.css,
+    source.coffee entity.other.attribute-name.class.stylus,
+    source.coffee entity.other.attribute-name.id.stylus,
+    source.coffee entity.other.attribute-name.class.sass,
+    source.coffee entity.other.attribute-name.id.sass
 settings:
   showInSymbolList: 1
-  showInIndexedSymbolList: 0
+  showInIndexedSymbolList: 1
+  showInIndexedReferenceList: 1
   symbolTransformation: >
     s/\s+/ /g;
     s/.+/css: $0/g;
+  symbolIndexTransformation: >
+    s/\s+/ /g;
 uuid: fb745e90-1a2f-48ab-a6a7-927eb68d32ce

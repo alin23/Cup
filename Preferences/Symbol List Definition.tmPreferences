@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List</string>
+	<key>scope</key>
+	<string>source.coffee variable.language.member.definition.coffee, source.coffee variable.other.readwrite.definition.coffee, source.coffee variable.other.constant.definition.coffee, source.coffee variable.other.property.static.definition.coffee, source.coffee string.unquoted.label.coffee
+</string>
+	<key>settings</key>
+	<dict>
+		<key>showInIndexedReferenceList</key>
+		<integer>0</integer>
+		<key>showInIndexedSymbolList</key>
+		<integer>1</integer>
+		<key>showInSymbolList</key>
+		<integer>0</integer>
+	</dict>
+	<key>uuid</key>
+	<string>78aeae64-b420-4227-ac85-c2cdf871800f</string>
+</dict>
+</plist>

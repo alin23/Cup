@@ -8,6 +8,4 @@ settings:
   showInIndexedSymbolList: 1
   symbolTransformation: >
     s/.+/function $0/g;
-  symbolIndexTransformation: >
-    s/.+/function $0/g;
 uuid: a5f4bbfb-99e9-44ec-8e18-602e431c2b9c

@@ -7,7 +7,7 @@ settings:
   showInSymbolList: 1
   showInIndexedSymbolList: 1
   symbolTransformation: >
-    s/(['"])\s*(.+)\s*\1/id: $2/g;
+    s/(['"])\s*(.+)\s*\1/#$2/g;
   symbolIndexTransformation: >
-    s/(['"])\s*(.+)\s*\1/id: $2/g;
+    s/(['"])\s*(.+)\s*\1/$2/g;
 uuid: 9a734d7b-ee58-4e56-9ecf-604673dda104
