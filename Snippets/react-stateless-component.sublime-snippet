@@ -2,10 +2,10 @@
     <content><![CDATA[
 ${1:Component} = (props) ->
     ${2:<${3:div}
-      className={ props.className ? '' \}
-      id={ props.id ? '' \}
-      style={ props.style \}>
-      ${4:}
+        className={ props.className ? '' \}
+        id={ props.id ? '' \}
+        style={ props.style \}>
+        ${4:}
     </${3:div}>}
 
 export default ${1:Component}

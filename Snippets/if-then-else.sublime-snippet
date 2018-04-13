@@ -1,6 +1,5 @@
 <snippet>
-    <content><![CDATA[if ${1:condition} then ${2:...} else ${3:...}
-$0]]></content>
+    <content><![CDATA[if ${1:condition} then ${2:...} else ${3:...}]]></content>
     <tabTrigger>??</tabTrigger>
     <description>If Then Else</description>
     <scope>source.coffee</scope>
