@@ -1,6 +1,16 @@
 {
-    "extensions": ["coffee"],
+    "extensions": ["coffee", "litcoffee"],
     "tab_size": 4,
     "translate_tabs_to_spaces": true,
-    "detect_indentation": true
+    "detect_indentation": true,
+    "auto_complete_triggers": [
+        {
+            "characters": "<",
+            "selector": "meta.jsx.coffee"
+        },
+        {
+            "characters": ".@",
+            "selector": "source.coffee"
+        },
+    ]
 }

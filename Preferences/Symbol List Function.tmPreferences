@@ -13,9 +13,6 @@
 		<integer>1</integer>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
-		<key>symbolIndexTransformation</key>
-		<string>s/.+/function $0/g;
-</string>
 		<key>symbolTransformation</key>
 		<string>s/.+/function $0/g;
 </string>

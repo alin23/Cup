@@ -45,12 +45,13 @@ contexts:
 
     - include: literal-keywords
 
-    - include: literal-method
     - include: literal-module
     - include: literal-class
     # - include: flowtype-declaration
 
     - include: literal-number               # after literal-method since short methods can be numbers
+    - include: styled-jsx-stylus
+    - include: styled-jsx-sass
     - include: styled-jsx
 
     - include: literal-template-string
@@ -753,6 +754,12 @@ contexts:
         1: variable.function.coffee
 
   literal-language-variable:
+    - match: (@)({{identifier}})(?=\s*=)
+      scope: meta.property.class.coffee
+      captures:
+        1: variable.language.this.coffee
+        2: variable.language.member.definition.coffee
+
     - match: (@)({{identifier}})
       scope: meta.property.class.coffee
       captures:
@@ -1037,7 +1044,7 @@ contexts:
             1: punctuation.definition.string.end.coffee
             2: keyword.other.coffee
           pop: true
-        - include: scope:source.regexp.coffee
+        - include: scope:source.regexp.js
 
   literal-string:
     - match: (')
@@ -1081,9 +1088,21 @@ contexts:
       scope: constant.character.escape.coffee
 
   literal-variable:
+    # e.g. CONSTANT =
+    - match: _*?[A-Z][_$\dA-Z]*\b(?=\s*=)
+      scope: variable.other.constant.definition.coffee
+
     # e.g. CONSTANT
     - match: _*?[A-Z][_$\dA-Z]*\b
       scope: variable.other.constant.coffee
+
+    # e.g. Class.property =
+    - match: \b([A-Z][$\w]*)\s*(\.)({{identifier}})(?=\s*=)
+      scope: meta.property.class.coffee
+      captures:
+        1: variable.other.class.coffee
+        2: keyword.operator.accessor.coffee
+        3: variable.other.property.static.definition.coffee
 
     # e.g. Class.property
     - match: \b([A-Z][$\w]*)\s*(\.)({{identifier}})
@@ -1103,12 +1122,29 @@ contexts:
       captures:
         1: variable.other.object.coffee
 
+    # e.g. obj.property =
+    - match: (?<=\.)\s*({{identifier}})(?=\s*=)
+      scope: meta.property.member.coffee
+      captures:
+        1: variable.other.member.definition.coffee
+
     # e.g. obj.property
     - match: (?<=\.)\s*({{identifier}})
       scope: meta.property.member.coffee
       captures:
         1: variable.other.member.coffee
 
+    # e.g. identifier =
+    - match: '{{identifier}}(?=\s*=)'
+      scope: variable.other.readwrite.definition.coffee
+
+    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!\s*->)
+      scope: constant.other.object.key.coffee
+      captures:
+        1: string.unquoted.label.coffee
+        2: punctuation.separator.key-value.coffee
+
+    # e.g. identifier
     - match: '{{identifier}}'
       scope: variable.other.readwrite.coffee
 
@@ -1168,8 +1204,52 @@ contexts:
           pop: true
         - include: jsx-tag-start
 
+  styled-jsx-stylus:
+    - match: '\"\"\"#{\s*}\s*//\s*stylus'
+      scope: punctuation.section.style.begin.jsx
+      push: Packages/Stylus/Stylus.tmLanguage
+      with_prototype:
+        - match: \"
+          scope: punctuation.section.style.end.jsx
+          pop: true
+        - match: :global\(
+          scope: keyword.other.global.begin.coffee
+          push:
+            - match: \)
+              scope: keyword.other.global.end.coffee
+              pop: true
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          push:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              pop: true
+            - include: expression
+
+  styled-jsx-sass:
+    - match: '\"\"\"#{\s*}\s*//\s*sass'
+      scope: punctuation.section.style.begin.jsx
+      push: Packages/Sass/Syntaxes/Sass.sublime-syntax
+      with_prototype:
+        - match: \"
+          scope: punctuation.section.style.end.jsx
+          pop: true
+        - match: :global\(
+          scope: keyword.other.global.begin.coffee
+          push:
+            - match: \)
+              scope: keyword.other.global.end.coffee
+              pop: true
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          push:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              pop: true
+            - include: expression
+
   styled-jsx:
-    - match: \"#{}
+    - match: \"#{\s*}
       scope: punctuation.section.style.begin.jsx
       push: Packages/CSS3/CSS3.sublime-syntax
       with_prototype:
@@ -1245,6 +1325,8 @@ contexts:
         - match: \}
           scope: punctuation.section.embedded.end.jsx
           pop: true
+        - include: styled-jsx-stylus
+        - include: styled-jsx-sass
         - include: styled-jsx
         - include: jsx-tag-start
         - include: expression

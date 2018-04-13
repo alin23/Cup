@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+<style ${1:global} jsx>{"""#{} // stylus
+	${2:}
+"""}</style>]]></content>
+    <tabTrigger>stylusjsx</tabTrigger>
+    <description>Styled JSX Stylus</description>
+    <scope>source.coffee</scope>
+</snippet>

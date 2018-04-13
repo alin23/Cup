@@ -14,10 +14,10 @@
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolIndexTransformation</key>
-		<string>s/(['"])\s*(.+)\s*\1/id: $2/g;
+		<string>s/(['"])\s*(.+)\s*\1/$2/g;
 </string>
 		<key>symbolTransformation</key>
-		<string>s/(['"])\s*(.+)\s*\1/id: $2/g;
+		<string>s/(['"])\s*(.+)\s*\1/#$2/g;
 </string>
 	</dict>
 	<key>uuid</key>
