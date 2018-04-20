@@ -1,10 +1,11 @@
 <snippet>
     <content><![CDATA[
-${1:Component} = (props) ->
+${1:Component} = ({ className, id, style, children, props... }) ->
     ${2:<${3:div}
-        className={ props.className ? '' \}
-        id={ props.id ? '' \}
-        style={ props.style \}>
+        className={ className ? '' \}
+        id={ id ? '' \}
+        style={ style \}
+        { props... \}>
         ${4:}
     </${3:div}>}
 
