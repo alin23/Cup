@@ -1,7 +1,8 @@
 # [PackageDev] target_format: plist, ext: tmPreferences
 name: Symbol List
 scope: >
-  source.coffee entity.name.class.coffee
+  source.coffee entity.name.class.coffee,
+  source.coffee variable.other.class.definition.coffee
 settings:
   showInSymbolList: 1
   showInIndexedSymbolList: 1

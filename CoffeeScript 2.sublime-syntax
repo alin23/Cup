@@ -1112,6 +1112,10 @@ contexts:
         2: keyword.operator.accessor.coffee
         3: variable.other.property.static.coffee
 
+    # e.g. Class =
+    - match: \b([A-Z][$\w]*)(?=\s*=)
+      scope: variable.other.class.definition.coffee
+
     # e.g. Class
     - match: \b([A-Z][$\w]*)\b
       scope: variable.other.class.coffee

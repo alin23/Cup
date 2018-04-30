@@ -7,11 +7,11 @@ settings:
   showInSymbolList: 1
   showInIndexedSymbolList: 1
   symbolTransformation: >
-    s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row)(-reverse)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g;
+    s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row|grow)(-reverse|-1|-0)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g;
     s/[\s\n]+/ /g;
     s/(['"])\s*(.*?)\s*\1/.$2/g;
   symbolIndexTransformation: >
-    s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row)(-reverse)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g;
+    s/\b(display-[0-5]|(btn|font)-([^\-\s'"]+-)*[^\-\s'"]+|text-((xs|sm|md|lg|xl)-)?[^\-\s'"]+|[mp][tblrxy]?-((xs|sm|md|lg|xl)-)?([0-5]|auto)|d-((xs|sm|md|lg|xl)-)?(none|inline|inline-block|table|table-cell|table-row|flex|inline-flex)|justify-(content|self)-((xs|sm|md|lg|xl)-)?(start|end|center|between|around)|align-(items|self)-((xs|sm|md|lg|xl)-)?(start|end|center|baseline|stretch)|flex-((xs|sm|md|lg|xl)-)?(wrap|nowrap|column|row)|grow(-reverse|-1|-0)?|order-((xs|sm|md|lg|xl)-)?[0-9]+|[wh]-?(0|25|50|75|100)(v[hw])?)//g;
     s/[\s\n]+/ /g;
     s/(['"])\s*(.*?)\s*\1/$2/g;
 uuid: 9153fc85-3e5e-468d-b810-f59bc9b827ba
