@@ -18,6 +18,16 @@ Sublime stores packages in the following locations:
 ### With Package Control
 [Waiting for approval](https://github.com/wbond/package_control_channel/pull/7024)
 
+## Dependencies
+```shell
+npm install -g isort-coffee
+```
+or
+```shell
+yarn global add isort-coffee
+```
+
+
 ## Features
 
 - Syntax Highlighting for all the new features (including JSX and CSS/Styles JSX)
