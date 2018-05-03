@@ -1,7 +1,16 @@
 # Cup
 ### _For your daily dose of CoffeeScript_
 
+
 ## Installation
+
+### With Package Control
+> This is the recommended installation method.
+
+* Open the Command Pallete (`ctrl+shift+P` or `cmd+shift+P`).
+* Type "Install Package" and hit return.
+* Type "Cup" and hit return.
+
 ### As a repository within the packages directory
 
 Open a Terminal/Console and run the following commands, replacing `PACKAGE_PATH` with the path corresponding to your OS above.
@@ -14,9 +23,6 @@ Sublime stores packages in the following locations:
     Unix: ~/.config/sublime-text-3/packages
     Mac: ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
     Win: %APPDATA%\Sublime Text 3\Packages
-
-### With Package Control
-[Waiting for approval](https://github.com/wbond/package_control_channel/pull/7024)
 
 ## Dependencies
 ```shell
