@@ -171,8 +171,8 @@ contexts:
         1: storage.type.class.coffee
         2: storage.type.interface.flowtype.coffee
       scope: storage.type.class.coffee
-      push: [class_body, class_extends, class_name]
-    - match: (?<=})
+      push: [class_extends, class_name]
+    - match: \n
       pop: true
 
   class_name:
@@ -188,25 +188,25 @@ contexts:
     - match: \b(extends)\b
       scope: storage.type.extends.coffee
       set:
-        - match: (?={)
+        - match: (?=\n)
           pop: true
         - include: expression
         # - include: flowtype-polymorph
-    - match: (?={)
+    - match: (?=\n)
       pop: true
 
-  class_body:
-    - match: '{'
-      scope: punctuation.definition.class.body.begin.coffee
-      set:
-        - match: '}'
-          scope: punctuation.definition.class.body.end.coffee
-          pop: true
-        # - include: es7-decorators
-        - include: class-properties
-        - include: class-method-definition
-        - include: class-method-storage
-        - include: brackets
+  # class_body:
+  #   - match: '{'
+  #     scope: punctuation.definition.class.body.begin.coffee
+  #     set:
+  #       - match: '}'
+  #         scope: punctuation.definition.class.body.end.coffee
+  #         pop: true
+  #       # - include: es7-decorators
+  #       - include: class-properties
+  #       - include: class-method-definition
+  #       - include: class-method-storage
+  #       - include: brackets
 
   # flowtype-declaration:
   #   - match: (?<!\.)\b(declare)\b
