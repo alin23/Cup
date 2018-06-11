@@ -96,6 +96,8 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
         import_region = self.get_import_region()
         if not import_region:
             logging.warning("No import region detected")
+            if save:
+                self.view.run_command("save")
             return
 
         cmd = self.sort_cmd(settings.get("isort_coffee_bin"))
