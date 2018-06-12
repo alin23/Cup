@@ -92,20 +92,24 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
         return self.view.match_selector(0, "source.coffee")
 
     def run(self, edit, save=False):
-        settings = self.view.settings().get("cup") or {}
-        import_region = self.get_import_region()
-        if not import_region:
-            logging.warning("No import region detected")
+        try:
+            settings = self.view.settings().get("cup") or {}
+            import_region = self.get_import_region()
+            if not import_region:
+                logging.warning("No import region detected")
+                if save:
+                    self.view.run_command("save")
+                return
+
+            cmd = self.sort_cmd(settings.get("isort_coffee_bin"))
+            sublime.set_timeout_async(
+                functools.partial(
+                    self.sort_imports, import_region, cmd, self.view.id(), save=save
+                )
+            )
+        except:
             if save:
                 self.view.run_command("save")
-            return
-
-        cmd = self.sort_cmd(settings.get("isort_coffee_bin"))
-        sublime.set_timeout_async(
-            functools.partial(
-                self.sort_imports, import_region, cmd, self.view.id(), save=save
-            )
-        )
 
 
 class CupInsertSnippet(sublime_plugin.TextCommand):
