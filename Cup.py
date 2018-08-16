@@ -65,42 +65,53 @@ class CupSortImportsCommand(sublime_plugin.TextCommand):
         view = sublime.View(vid)
         if not view.is_valid():
             return
+
+        sublime.status_message("Sorting imports...")
+
+        import_code = ""
         if import_region:
             import_code = view.substr(import_region)
         else:
-            start, end, import_code = self.get_import_code(code)
+            imports = self.get_import_code(code)
+            if imports:
+                start, end, import_code = imports
 
-        with subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            startupinfo=startupinfo,
-        ) as coffee:
-            try:
-                out, err = coffee.communicate(import_code.encode(), timeout=10)
-                if err:
-                    logging.error(err)
-                    return
+        if import_code:
+            with subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                startupinfo=startupinfo,
+            ) as coffee:
+                try:
+                    out, err = coffee.communicate(import_code.encode(), timeout=10)
+                    if err:
+                        logging.error(err)
+                except subprocess.TimeoutExpired:
+                    coffee.kill()
+                    logging.error("Sorter timed out")
+                else:
+                    sorted_imports = out.decode("utf-8")
+                    if not sorted_imports:
+                        logging.error("No sorted imports returned")
 
-            except subprocess.TimeoutExpired:
-                coffee.kill()
-                logging.error("Sorter timed out")
-                return
+            if import_region:
+                text = sorted_imports.strip()
+                region = (import_region.a, import_region.b)
+            else:
+                text = code[:start] + sorted_imports.strip() + code[end:]
+                region = (0, view.size())
 
-        sorted_imports = out.decode("utf-8")
-        if not sorted_imports:
-            logging.error("No sorted imports returned")
-            return
-
-        if import_region:
-            text = sorted_imports.strip()
-            region = (import_region.a, import_region.b)
+            args = {"text": text, "region": region, "save": save, "prettify": prettify}
         else:
-            text = code[:start] + sorted_imports.strip() + code[end:]
-            region = (0, view.size())
+            args = {
+                "text": code,
+                "region": (0, view.size()),
+                "save": save,
+                "prettify": prettify,
+            }
 
-        args = {"text": text, "region": region, "save": save, "prettify": prettify}
         view = sublime.View(vid)
         if view.is_valid():
             view.run_command("cup_replace_region", args)

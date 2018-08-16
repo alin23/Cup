@@ -129,6 +129,8 @@ class CupImportJsCommand(sublime_plugin.TextCommand):
         if not view.is_valid():
             return
 
+        sublime.status_message("Fixing imports...")
+
         process = self.start_or_get_daemon(project_root)
         process.stdin.write((json.dumps(payload) + "\n").encode("utf-8"))
         process.stdin.flush()
