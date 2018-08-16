@@ -1242,6 +1242,7 @@ contexts:
         - meta_content_scope: meta.jsx.coffee
         - match: (?<=/>|>)
           pop: true
+        - include: jsx-fragment
         - include: jsx-tag-start
 
   graphql:
@@ -1391,6 +1392,7 @@ contexts:
         - include: styled-jsx-stylus
         - include: styled-jsx-sass
         - include: styled-jsx
+        - include: jsx-fragment
         - include: jsx-tag-start
         - include: expression
 
@@ -1511,6 +1513,24 @@ contexts:
         - meta_include_prototype: false
         - match: (?=</)
           pop: true
+        - include: jsx-fragment
+        - include: jsx-tag-start
+        - include: jsx-evaluated-code
+        - include: jsx-entities
+
+  jsx-fragment:
+    - match: (<)(>)
+      captures:
+        1: meta.tag.jsx punctuation.definition.tag.begin.jsx
+        2: meta.tag.jsx punctuation.definition.tag.end.jsx
+      push:
+        - meta_include_prototype: false
+        - match: (<)(/>)
+          captures:
+            1: meta.tag.jsx punctuation.definition.tag.begin.jsx
+            2: meta.tag.jsx punctuation.definition.tag.end.jsx
+          pop: true
+        - include: jsx-fragment
         - include: jsx-tag-start
         - include: jsx-evaluated-code
         - include: jsx-entities

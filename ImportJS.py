@@ -11,8 +11,19 @@ import_js_environment = {}
 daemon = None
 
 
-def handle_resolved_imports(view, resolved_imports):
-    view.run_command("cup_import_js", {"command": "add", "imports": resolved_imports})
+def handle_resolved_imports(
+    view, resolved_imports, save=False, prettify=False, sort=False
+):
+    view.run_command(
+        "cup_import_js",
+        {
+            "command": "add",
+            "imports": resolved_imports,
+            "save": save,
+            "prettify": prettify,
+            "sort": sort,
+        },
+    )
 
 
 def plugin_loaded():
@@ -69,7 +80,7 @@ def save_view(vid):
 
 
 class CupImportJsReplaceCommand(sublime_plugin.TextCommand):
-    def run(self, edit, code=None, save=False):
+    def run(self, edit, code=None, save=False, prettify=False):
         if code and code != self.view.substr(sublime.Region(0, self.view.size())):
             self.view.replace(edit, sublime.Region(0, self.view.size()), code)
             self.view.show_at_center(0)
@@ -153,11 +164,17 @@ class CupImportJsCommand(sublime_plugin.TextCommand):
         if result.get("unresolvedImports"):
             view.run_command(
                 "cup_import_js_replace",
-                {"save": save, "code": result.get("fileContent")},
+                {"save": save, "prettify": prettify, "code": result.get("fileContent")},
             )
             self.ask_to_resolve(
                 result.get("unresolvedImports"),
-                functools.partial(handle_resolved_imports, view),
+                functools.partial(
+                    handle_resolved_imports,
+                    view,
+                    save=save,
+                    prettify=prettify,
+                    sort=sort,
+                ),
             )
             return
 
