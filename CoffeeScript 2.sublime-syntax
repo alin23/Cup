@@ -50,10 +50,13 @@ contexts:
     # - include: flowtype-declaration
 
     - include: literal-number               # after literal-method since short methods can be numbers
+    - include: graphql
     - include: styled-jsx-stylus
     - include: styled-jsx-sass
     - include: styled-jsx
 
+    - include: literal-multiline-string
+    - include: literal-multiline-template-string
     - include: literal-template-string
     - include: literal-string
     - include: literal-language-constant
@@ -104,19 +107,19 @@ contexts:
     - include: curly-brackets
 
   comments:
-    - match: \{\#\#\#
+    - match: \{\#\#\#(?!\#\#\#)
       scope: punctuation.definition.comment.begin.coffee
       push:
         - meta_scope: comment.block.jsx
-        - match: \#\#\#\}
+        - match: (?<!\#\#\#)\#\#\#\}
           scope: punctuation.definition.comment.end.coffee
           pop: true
 
-    - match: \#\#\#
+    - match: \#\#\#(?!\#\#\#)
       scope: punctuation.definition.comment.begin.coffee
       push:
         - meta_scope: comment.block.coffee
-        - match: \#\#\#
+        - match: (?<!\#\#\#)\#\#\#
           scope: punctuation.definition.comment.end.coffee
           pop: true
 
@@ -983,6 +986,8 @@ contexts:
         - match: ':'
           scope: punctuation.separator.key-value.coffee
           pop: true
+        - include: literal-multiline-string
+        - include: literal-multiline-template-string
         - include: literal-template-string
         - include: literal-string
 
@@ -1046,8 +1051,19 @@ contexts:
           pop: true
         - include: scope:source.regexp.js
 
+  literal-multiline-string:
+    - match: (''')
+      scope: punctuation.definition.string.quoted.multiline.begin.coffee
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.multiline.coffee
+        - match: \1
+          scope: punctuation.definition.string.quoted.multiline.end.coffee
+          pop: true
+        - include: string-content
+
   literal-string:
-    - match: (')
+    - match: (')(?!'')
       scope: punctuation.definition.string.quoted.begin.coffee
       push:
         - meta_include_prototype: false
@@ -1076,6 +1092,26 @@ contexts:
         - match: '}'
           scope: keyword.other.substitution.end.coffee
           set: template-string-body
+        - include: expression
+    - include: string-content
+
+  literal-multiline-template-string:
+    - match: '"""'
+      scope: punctuation.definition.template.multiline.begin.coffee
+      push: template-string-multiline-body
+
+  template-string-multiline-body:
+    - meta_include_prototype: false
+    - meta_scope: string.interpolated.coffee
+    - match: '"""'
+      scope: punctuation.definition.template.end.coffee
+      pop: true
+    - match: \#{
+      scope: keyword.other.substitution.begin.coffee
+      set:
+        - match: '}'
+          scope: keyword.other.substitution.end.coffee
+          set: template-string-multiline-body
         - include: expression
     - include: string-content
 
@@ -1208,6 +1244,28 @@ contexts:
           pop: true
         - include: jsx-tag-start
 
+  graphql:
+    - match: 'gql\"\"\"#{\s*}\s*'
+      scope: punctuation.section.gql.begin.jsx
+      push: Packages/GraphQL/GraphQL.sublime-syntax
+      with_prototype:
+        - match: \"
+          scope: punctuation.section.gql.end.jsx
+          pop: true
+        - match: :global\(
+          scope: keyword.other.global.begin.coffee
+          push:
+            - match: \)
+              scope: keyword.other.global.end.coffee
+              pop: true
+        - match: \#{
+          scope: keyword.other.substitution.begin.coffee
+          push:
+            - match: '}'
+              scope: keyword.other.substitution.end.coffee
+              pop: true
+            - include: expression
+
   styled-jsx-stylus:
     - match: '\"\"\"#{\s*}\s*//\s*stylus'
       scope: punctuation.section.style.begin.jsx
@@ -1329,6 +1387,7 @@ contexts:
         - match: \}
           scope: punctuation.section.embedded.end.jsx
           pop: true
+        - include: graphql
         - include: styled-jsx-stylus
         - include: styled-jsx-sass
         - include: styled-jsx

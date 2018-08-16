@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import logging
 import functools
@@ -23,22 +24,23 @@ def save_view(vid):
 
 
 class CupReplaceRegionCommand(sublime_plugin.TextCommand):
-
-    def run(self, edit, text=None, save=False, region=None):
+    def run(self, edit, text=None, save=False, region=None, prettify=False):
         if text:
             region = sublime.Region(*region) or sublime.Region(0, self.view.size())
             self.view.replace(edit, region, text)
-            if save:
+            if save and not prettify:
                 sublime.set_timeout_async(
                     functools.partial(save_view, self.view.id()), 1
                 )
+            if prettify:
+                self.view.run_command("js_prettier", {"save_file": save})
 
 
-class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
+class CupSortImportsCommand(sublime_plugin.TextCommand):
     import_re = r'^import\s+[^\'"]+\s+from\s+[\'"][^\'"]+[\'"]$'
     sorter = "isort-coffee"
 
-    def get_import_region(self):
+    def get_import_region(self, code=None):
         import_regions = self.view.find_all(self.import_re, sublime.IGNORECASE)
         if import_regions:
             return import_regions[0].cover(import_regions[-1])
@@ -48,10 +50,25 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
     def sort_cmd(self, isort_coffee_bin=None):
         return [isort_coffee_bin or self.sorter]
 
-    def sort_imports(self, import_region, cmd, vid, save=False):
+    def get_import_code(self, code):
+        import_pattern = re.compile(self.import_re, re.M)
+        matches = list(import_pattern.finditer(code))
+        if matches:
+            start, end = matches[0].start(), matches[-1].end()
+            return start, end, code[start:end]
+
+        return None
+
+    def sort_imports(
+        self, cmd, vid, import_region=None, code=None, save=False, prettify=False
+    ):
         view = sublime.View(vid)
-        if view.is_valid():
-            code = view.substr(import_region)
+        if not view.is_valid():
+            return
+        if import_region:
+            import_code = view.substr(import_region)
+        else:
+            start, end, import_code = self.get_import_code(code)
 
         with subprocess.Popen(
             cmd,
@@ -61,7 +78,7 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
             startupinfo=startupinfo,
         ) as coffee:
             try:
-                out, err = coffee.communicate(code.encode(), timeout=10)
+                out, err = coffee.communicate(import_code.encode(), timeout=10)
                 if err:
                     logging.error(err)
                     return
@@ -76,11 +93,14 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
             logging.error("No sorted imports returned")
             return
 
-        args = {
-            "text": sorted_imports.strip(),
-            "region": (import_region.a, import_region.b),
-            "save": save,
-        }
+        if import_region:
+            text = sorted_imports.strip()
+            region = (import_region.a, import_region.b)
+        else:
+            text = code[:start] + sorted_imports.strip() + code[end:]
+            region = (0, view.size())
+
+        args = {"text": text, "region": region, "save": save, "prettify": prettify}
         view = sublime.View(vid)
         if view.is_valid():
             view.run_command("cup_replace_region", args)
@@ -91,29 +111,45 @@ class CoffeescriptSortImportsCommand(sublime_plugin.TextCommand):
     def is_visible(self):
         return self.view.match_selector(0, "source.coffee")
 
-    def run(self, edit, save=False):
+    def run(self, edit, save=False, code=None, prettify=False):
         try:
             settings = self.view.settings().get("cup") or {}
-            import_region = self.get_import_region()
-            if not import_region:
-                logging.warning("No import region detected")
-                if save:
-                    self.view.run_command("save")
-                return
-
             cmd = self.sort_cmd(settings.get("isort_coffee_bin"))
-            sublime.set_timeout_async(
-                functools.partial(
-                    self.sort_imports, import_region, cmd, self.view.id(), save=save
+            if not code:
+                import_region = self.get_import_region()
+                if not import_region:
+                    logging.warning("No import region detected")
+                    if save:
+                        self.view.run_command("save")
+                    return
+
+                sublime.set_timeout_async(
+                    functools.partial(
+                        self.sort_imports,
+                        cmd,
+                        self.view.id(),
+                        import_region=import_region,
+                        save=save,
+                        prettify=prettify,
+                    )
                 )
-            )
+            else:
+                sublime.set_timeout_async(
+                    functools.partial(
+                        self.sort_imports,
+                        cmd,
+                        self.view.id(),
+                        code=code,
+                        save=save,
+                        prettify=prettify,
+                    )
+                )
         except:
             if save:
                 self.view.run_command("save")
 
 
 class CupInsertSnippet(sublime_plugin.TextCommand):
-
     def run(self, edit, **kwargs):
         if not kwargs:
             return

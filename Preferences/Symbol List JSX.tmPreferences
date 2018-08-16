@@ -5,8 +5,7 @@
 	<key>name</key>
 	<string>Symbol List</string>
 	<key>scope</key>
-	<string>source.coffee entity.name.tag.begin.jsx
-</string>
+	<string>source.coffee entity.name.tag.begin.jsx</string>
 	<key>settings</key>
 	<dict>
 		<key>showInIndexedReferenceList</key>
@@ -22,7 +21,7 @@
 		<string>s/^(a|aside|button|blockquote|body|dd|div|dl|dt|fieldset|figure|footer|form|g|head|header|html|input|label|legend|li|link|meta|nav|ol|optgroup|option|p|path|script|section|select|span|style|svg|table|tbody|td|th|thead|tr|ul|video)$//g; s/.+/&lt;$0&gt;/g;
 </string>
 	</dict>
-	<key>vuuid</key>
+	<key>uuid</key>
 	<string>62aaedda-7a9a-4a2e-9a4e-ee009eb2388c</string>
 </dict>
 </plist>

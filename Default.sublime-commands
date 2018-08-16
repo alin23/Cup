@@ -1,7 +1,32 @@
 [
     {
+        "caption": "Cup: Fix and sort imports",
+        "command": "cup_import_js",
+        "args": { "command": "fix", "sort": true }
+    },
+    {
+        "caption": "Cup: Import word under cursor and sort",
+        "command": "cup_import_js",
+        "args": { "command": "word", "sort": true }
+    },
+    {
+        "caption": "Cup: Fix all imports",
+        "command": "cup_import_js",
+        "args": { "command": "fix" }
+    },
+    {
+        "caption": "Cup: Import word under cursor",
+        "command": "cup_import_js",
+        "args": { "command": "word" }
+    },
+    {
+        "caption": "Cup: Goto module",
+        "command": "cup_import_js",
+        "args": { "command": "goto" }
+    },
+    {
         "caption": "Cup: Sort imports",
-        "command": "coffeescript_sort_imports"
+        "command": "cup_sort_imports"
     },
     {
         "caption": "Cup: Check Syntax",
@@ -44,19 +69,18 @@
     },
     {
         "caption": "Preferences: Cup Key Bindings",
-        "command": "edit_settings", "args":
-        {
+        "command": "edit_settings",
+        "args": {
             "base_file": "${packages}/Cup/Keymaps/Default ($platform).sublime-keymap",
             "default": "${packages}/User/Default ($platform).sublime-keymap"
         }
     },
     {
         "caption": "Preferences: Cup Settings",
-        "command": "edit_settings", "args":
-        {
+        "command": "edit_settings",
+        "args": {
             "base_file": "${packages}/Cup/Preferences/Cup.sublime-settings",
             "default": "// Cup Settings - User\n{\n\t$0\n}\n"
         }
     }
-
 ]

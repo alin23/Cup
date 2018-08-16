@@ -26,11 +26,11 @@ Sublime stores packages in the following locations:
 
 ## Dependencies
 ```shell
-npm install -g isort-coffee
+npm install -g isort-coffee import-js
 ```
 or
 ```shell
-yarn global add isort-coffee
+yarn global add isort-coffee import-js
 ```
 
 
@@ -39,7 +39,7 @@ yarn global add isort-coffee
 - Syntax Highlighting for all the new features (including JSX and CSS/Styles JSX)
 ![Highlight JSX](Screenshots/highlighting-jsx.jpg)
 ![Highlight CSS](Screenshots/highlighting-css.jpg)
-- Import sorting and grouping
+- Import fixing, sorting and grouping
 ![Import sorting](Screenshots/sort.gif)
 - Lots of snippets (including React and Next.js support)
 - All the features of [Better CoffeeScript](https://github.com/aponxi/sublime-better-coffeescript) and [React Coffee Snippets](https://github.com/monstersintokyo/react-coffee-sublime-snippets)
