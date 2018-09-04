@@ -35,6 +35,7 @@ contexts:
     - include: merge-conflicts
     - include: literal-regexp             # before operators and keywords to avoid ambiguities
     - include: literal-jsx
+    - include: jsx-fragment
     # - include: es7-decorators
     - include: support-class
     - include: support-other
@@ -1035,8 +1036,8 @@ contexts:
         (?x)
           (?<=
             \.|\(|,|{|}|\[|;|<|>|<=|>=|==|!=|===|!==|\+|-|\*|%|\+\+|--|<<|>>|>>>|&|\||\^|!|~|&&|\|\||\?|:|=|\+=|-=|\*=|%=|<<=|>>=|>>>=|&=|\|=|\^=|/|/=|
-            \Wnew|\Wdelete|\Wvoid|\Wtypeof|\Winstanceof|\Win|\Wdo|\Wreturn|\Wcase|\Wthrow|\Wyield
-            ^new|^delete|^void|^typeof|^instanceof|^in|^do|^return|^case|^throw|^yield|^
+            \Wnew|\Wdelete|\Wvoid|\Wtypeof|\Winstanceof|\Win|\Wdo|\Wreturn|\Wcase|\Wthrow|\Wyield|\Wwhen|\Wthen
+            ^new|^delete|^void|^typeof|^instanceof|^in|^do|^return|^case|^throw|^yield|^when|^then|^
           )\s*
           (/)
           (?!/|\*|$)
@@ -1087,10 +1088,10 @@ contexts:
       scope: punctuation.definition.template.end.coffee
       pop: true
     - match: \#{
-      scope: keyword.other.substitution.begin.coffee
+      scope: meta.brace.curly.begin.coffee keyword.other.substitution.begin.coffee
       set:
         - match: '}'
-          scope: keyword.other.substitution.end.coffee
+          scope: meta.brace.curly.end.coffee keyword.other.substitution.end.coffee
           set: template-string-body
         - include: expression
     - include: string-content
