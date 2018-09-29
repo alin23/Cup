@@ -5,16 +5,16 @@
 	<key>name</key>
 	<string>Symbol List</string>
 	<key>scope</key>
-	<string>source.coffee variable.other.property.static.definition.coffee, source.coffee string.unquoted.label.coffee
+	<string>source.coffee variable.language.member.definition.coffee, source.coffee variable.other.readwrite.definition.coffee, source.coffee variable.other.constant.definition.coffee
 </string>
 	<key>settings</key>
 	<dict>
 		<key>showInIndexedReferenceList</key>
-		<integer>0</integer>
+		<integer>1</integer>
 		<key>showInIndexedSymbolList</key>
 		<integer>1</integer>
 		<key>showInSymbolList</key>
-		<integer>0</integer>
+		<integer>1</integer>
 	</dict>
 	<key>uuid</key>
 	<string>78aeae64-b420-4227-ac85-c2cdf871800f</string>

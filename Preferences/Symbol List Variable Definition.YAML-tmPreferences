@@ -1,0 +1,11 @@
+# [PackageDev] target_format: plist, ext: tmPreferences
+name: Symbol List
+scope: >
+  source.coffee variable.language.member.definition.coffee,
+  source.coffee variable.other.readwrite.definition.coffee,
+  source.coffee variable.other.constant.definition.coffee
+settings:
+  showInSymbolList: 1
+  showInIndexedSymbolList: 1
+  showInIndexedReferenceList: 1
+uuid: 78aeae64-b420-4227-ac85-c2cdf871800f
