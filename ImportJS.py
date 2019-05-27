@@ -98,7 +98,7 @@ class CupImportJsCommand(sublime_plugin.TextCommand):
 
     def start_or_get_daemon(self, project_root):
         global daemon
-        if daemon is not None:
+        if daemon is not None and daemon.poll() is not None:
             return daemon
 
         is_windows = os.name == "nt"

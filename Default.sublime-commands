@@ -1,5 +1,10 @@
 [
     {
+        "caption": "Cup: Format and sort imports",
+        "command": "cup_sort_imports",
+        "args": { "save": "false", "prettify": true }
+    },
+    {
         "caption": "Cup: Fix and sort imports",
         "command": "cup_import_js",
         "args": { "command": "fix", "sort": true }
