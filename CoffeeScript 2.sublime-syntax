@@ -33,7 +33,7 @@ contexts:
 
   expression:
     - include: merge-conflicts
-    - include: literal-regexp             # before operators and keywords to avoid ambiguities
+    - include: literal-regexp # before operators and keywords to avoid ambiguities
     - include: literal-jsx
     - include: jsx-fragment
     # - include: es7-decorators
@@ -42,7 +42,7 @@ contexts:
 
     - include: literal-function
     - include: literal-arrow-function
-    - include: literal-prototype          # after literal-function, which includes some prototype strings
+    - include: literal-prototype # after literal-function, which includes some prototype strings
 
     - include: literal-keywords
 
@@ -50,7 +50,7 @@ contexts:
     - include: literal-class
     # - include: flowtype-declaration
 
-    - include: literal-number               # after literal-method since short methods can be numbers
+    - include: literal-number # after literal-method since short methods can be numbers
     - include: graphql
     - include: styled-jsx-stylus
     - include: styled-jsx-sass
@@ -93,11 +93,11 @@ contexts:
         - include: expression
 
   curly-brackets:
-    - match: '{'
+    - match: "{"
       scope: meta.brace.curly.begin.coffee
       push:
         - meta_scope: meta.group.braces.curly.coffee
-        - match: '}'
+        - match: "}"
           scope: meta.brace.curly.end.coffee
           pop: true
         - include: main
@@ -153,7 +153,7 @@ contexts:
         - match: (?<!\.)({{identifier}})(?=[, \)])
           scope: variable.parameter.function.coffee
         - include: expression
-        - match: ','
+        - match: ","
           scope: punctuation.separator.parameter.function.coffee
         - match: \)
           scope: punctuation.definition.parameters.end.coffee
@@ -410,8 +410,8 @@ contexts:
     - match: >-
         (?x)
           (\b_?[A-Z][$\w]*)?
-          (\.)(prototype)
-          (\.)({{identifier}})
+          (?:(\.)(prototype)(\.)|(::))
+          ({{identifier}})
           \s*(=)
           \s*(?:(async)\s+)?
           \s*(function)(?>\s*(\*)|(?=[\s(<]))
@@ -421,12 +421,13 @@ contexts:
         2: keyword.operator.accessor.coffee
         3: variable.language.prototype.coffee
         4: keyword.operator.accessor.coffee
-        5: entity.name.function.coffee
-        6: keyword.operator.assignment.coffee
-        7: storage.type.coffee
-        8: storage.type.function.coffee
-        9: keyword.generator.asterisk.coffee
-        10: entity.name.function.coffee
+        5: variable.language.prototype.coffee
+        6: entity.name.function.coffee
+        7: keyword.operator.assignment.coffee
+        8: storage.type.coffee
+        9: storage.type.function.coffee
+        10: keyword.generator.asterisk.coffee
+        11: entity.name.function.coffee
       push:
         - meta_scope: meta.function.prototype.coffee
         - match: (?<=\))
@@ -550,8 +551,8 @@ contexts:
     - match: >-
         (?x)
           (\b_?[A-Z][$\w]*)?
-          (\.)(prototype)
-          (\.)({{identifier}})
+          (?:(\.)(prototype)(\.)|(::))
+          ({{identifier}})
           \s*([=:])
           \s*(async)?
           \s*(?=(\((?>(?>[^()]+)|\g<-1>)*\))\s*([=\-]>))
@@ -560,9 +561,10 @@ contexts:
         2: keyword.operator.accessor.coffee
         3: variable.language.prototype.coffee
         4: keyword.operator.accessor.coffee
-        5: entity.name.function.coffee
-        6: keyword.operator.assignment.coffee
-        7: storage.type.coffee
+        5: variable.language.prototype.coffee
+        6: entity.name.function.coffee
+        7: keyword.operator.assignment.coffee
+        8: storage.type.coffee
       push:
         - meta_scope: meta.prototype.function.arrow.coffee
         - match: (?<=\))\s*([=\-]>)
@@ -575,8 +577,8 @@ contexts:
     - match: >-
         (?x)
           (\b_?[A-Z][$\w]*)?
-          (\.)(prototype)
-          (\.)({{identifier}})
+          (?:(\.)(prototype)(\.)|(::))
+          ({{identifier}})
           \s*([=:])
           \s*(async)?
           \s*\b({{identifier}})\s*([=\-]>)
@@ -586,11 +588,12 @@ contexts:
         2: keyword.operator.accessor.coffee
         3: variable.language.prototype.coffee
         4: keyword.operator.accessor.coffee
-        5: entity.name.function.coffee
-        6: keyword.operator.assignment.coffee
-        7: storage.type.coffee
-        8: variable.parameter.function.coffee
-        9: storage.type.function.arrow.coffee
+        5: variable.language.prototype.coffee
+        6: entity.name.function.coffee
+        7: keyword.operator.assignment.coffee
+        8: storage.type.coffee
+        9: variable.parameter.function.coffee
+        10: storage.type.function.arrow.coffee
 
     # e.g. Sound.play = (args) => { }
     - match: >-
@@ -764,7 +767,7 @@ contexts:
         1: variable.language.this.coffee
         2: variable.language.member.definition.coffee
 
-    - match: (@)({{identifier}})
+    - match: (@)({{identifier}})?
       scope: meta.property.class.coffee
       captures:
         1: variable.language.this.coffee
@@ -986,7 +989,7 @@ contexts:
             ((")((?>[^"\\]|\\.)*)("))
           )\s*:)
       push:
-        - match: ':'
+        - match: ":"
           scope: punctuation.separator.key-value.coffee
           pop: true
         - include: literal-multiline-string
@@ -994,7 +997,7 @@ contexts:
         - include: literal-template-string
         - include: literal-string
 
-    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!\s*->)
+    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!:|\s*->)
       scope: constant.other.object.key.coffee
       captures:
         1: string.unquoted.label.coffee
@@ -1028,7 +1031,7 @@ contexts:
     - match: ;
       scope: punctuation.terminator.statement.coffee
 
-    - match: ','
+    - match: ","
       scope: meta.delimiter.comma.coffee
 
   literal-regexp:
@@ -1112,7 +1115,7 @@ contexts:
     - match: \#{
       scope: keyword.other.substitution.begin.coffee
       set:
-        - match: '}'
+        - match: "}"
           scope: keyword.other.substitution.end.coffee
           set: template-string-multiline-body
         - include: expression
@@ -1181,14 +1184,14 @@ contexts:
     - match: '{{identifier}}(?=\s*=)'
       scope: variable.other.readwrite.definition.coffee
 
-    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!\s*->)
+    - match: (?<!\.|\?|\?\s)({{identifier}})\s*(:)(?!:|\s*->)
       scope: constant.other.object.key.coffee
       captures:
         1: string.unquoted.label.coffee
         2: punctuation.separator.key-value.coffee
 
     # e.g. identifier
-    - match: '{{identifier}}'
+    - match: "{{identifier}}"
       scope: variable.other.readwrite.coffee
 
   support-class:
@@ -1233,10 +1236,10 @@ contexts:
         2: keyword.operator.accessor.coffee
         3: support.type.object.module.coffee
 
-    - match: '{{'
+    - match: "{{"
       push:
         - meta_scope: meta.tag.mustache.coffee
-        - match: '}}'
+        - match: "}}"
           pop: true
 
   literal-jsx:
@@ -1265,7 +1268,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           push:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               pop: true
             - include: expression
@@ -1287,7 +1290,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           push:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               pop: true
             - include: expression
@@ -1309,7 +1312,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           push:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               pop: true
             - include: expression
@@ -1331,11 +1334,10 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           push:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               pop: true
             - include: expression
-
 
   jsx-attribute-assignment:
     - match: =
@@ -1412,7 +1414,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1430,7 +1432,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1448,7 +1450,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1466,7 +1468,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1484,7 +1486,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1502,7 +1504,7 @@ contexts:
         - match: \#{
           scope: keyword.other.substitution.begin.coffee
           set:
-            - match: '}'
+            - match: "}"
               scope: keyword.other.substitution.end.coffee
               set: template-string-body
             - include: expression
@@ -1555,7 +1557,7 @@ contexts:
         - include: jsx-tag-end
         - include: jsx-attributes
 
-    - match: '<'
+    - match: "<"
       scope: invalid.illegal.tag.incomplete.jsx
 
   # https://github.com/wycats/javascript-decorators
@@ -1579,98 +1581,98 @@ contexts:
         1: invalid.illegal.conflict-marker.other-commit.coffee
         2: invalid.illegal.string.coffee
 
-  # flowtype-polymorph:
-  #   # http://flowtype.org/blog/2015/03/12/Bounded-Polymorphism.html
-  #   - match: '<'
-  #     scope: punctuation.section.flowtype.begin.coffee
-  #     push:
-  #     - meta_scope: meta.flowtype.polymorph.coffee
-  #     - match: '>'
-  #       scope: punctuation.section.flowtype.end.coffee
-  #       pop: true
-  #     - include: flowtype-tokens
+    # flowtype-polymorph:
+    #   # http://flowtype.org/blog/2015/03/12/Bounded-Polymorphism.html
+    #   - match: '<'
+    #     scope: punctuation.section.flowtype.begin.coffee
+    #     push:
+    #     - meta_scope: meta.flowtype.polymorph.coffee
+    #     - match: '>'
+    #       scope: punctuation.section.flowtype.end.coffee
+    #       pop: true
+    #     - include: flowtype-tokens
 
-  # flowtype-annotation:
-  #   - match: (?:(\?)\s*)?(:)
-  #     captures:
-  #       1: keyword.operator.flowtype.optional.coffee
-  #       2: keyword.operator.flowtype.annotation.coffee
-  #     push:
-  #       - meta_scope: meta.flowtype.annotation.coffee
-  #       - include: flowtype-tokens
-  #       - match: (?=\S)
-  #         pop: true
+    # flowtype-annotation:
+    #   - match: (?:(\?)\s*)?(:)
+    #     captures:
+    #       1: keyword.operator.flowtype.optional.coffee
+    #       2: keyword.operator.flowtype.annotation.coffee
+    #     push:
+    #       - meta_scope: meta.flowtype.annotation.coffee
+    #       - include: flowtype-tokens
+    #       - match: (?=\S)
+    #         pop: true
 
-  # flowtype-brackets:
-  #   - match: '{'
-  #     scope: punctuation.section.flowtype.begin.coffee
-  #     push:
-  #     - match: '}'
-  #       scope:  punctuation.section.flowtype.end.coffee
-  #       pop: true
-  #     - include: flowtype-tokens
+    # flowtype-brackets:
+    #   - match: '{'
+    #     scope: punctuation.section.flowtype.begin.coffee
+    #     push:
+    #     - match: '}'
+    #       scope:  punctuation.section.flowtype.end.coffee
+    #       pop: true
+    #     - include: flowtype-tokens
 
-  # flowtype-identifier:
-  #   - include: support-class
+    # flowtype-identifier:
+    #   - include: support-class
 
-  #   - match: \b(?:any|bool|boolean|mixed|number|string|void)\b
-  #     scope: constant.other.primitve.flowtype.coffee
+    #   - match: \b(?:any|bool|boolean|mixed|number|string|void)\b
+    #     scope: constant.other.primitve.flowtype.coffee
 
-  #   - match: '[_$a-zA-Z][$\w]*'
-  #     scope: variable.other.flowtype.coffee
+    #   - match: '[_$a-zA-Z][$\w]*'
+    #     scope: variable.other.flowtype.coffee
 
-  #   - match: \?
-  #     scope: keyword.operator.flowtype.optional.coffee
+    #   - match: \?
+    #     scope: keyword.operator.flowtype.optional.coffee
 
-  # flowtype-tokens:
-  #   - match: (?<=[:?|&=])(?=\s*{)
-  #     push:
-  #       - match: (?<=})
-  #         pop: true
-  #       - include: flowtype-brackets
+    # flowtype-tokens:
+    #   - match: (?<=[:?|&=])(?=\s*{)
+    #     push:
+    #       - match: (?<=})
+    #         pop: true
+    #       - include: flowtype-brackets
 
-  #   - match: \s*([|&])\s*
-  #     scope: meta.flowtype.set.coffee
-  #     captures:
-  #       1: keyword.operator.flowtype.other.coffee
+    #   - match: \s*([|&])\s*
+    #     scope: meta.flowtype.set.coffee
+    #     captures:
+    #       1: keyword.operator.flowtype.other.coffee
 
-  #   - match: '[*:?&|.]|\.\.\.|\b(typeof)\b'
-  #     scope: keyword.operator.flowtype.other.coffee
+    #   - match: '[*:?&|.]|\.\.\.|\b(typeof)\b'
+    #     scope: keyword.operator.flowtype.other.coffee
 
-  #   - match: '<'
-  #     scope: punctuation.section.flowtype.begin.coffee
-  #     push:
-  #     - match: '>'
-  #       scope: punctuation.section.flowtype.end.coffee
-  #       pop: true
-  #     - include: flowtype-tokens
+    #   - match: '<'
+    #     scope: punctuation.section.flowtype.begin.coffee
+    #     push:
+    #     - match: '>'
+    #       scope: punctuation.section.flowtype.end.coffee
+    #       pop: true
+    #     - include: flowtype-tokens
 
-  #   - match: \[
-  #     scope: punctuation.section.flowtype.begin.coffee
-  #     push:
-  #     - match: \]
-  #       scope: punctuation.section.flowtype.end.coffee
-  #       pop: true
-  #     - include: flowtype-tokens
+    #   - match: \[
+    #     scope: punctuation.section.flowtype.begin.coffee
+    #     push:
+    #     - match: \]
+    #       scope: punctuation.section.flowtype.end.coffee
+    #       pop: true
+    #     - include: flowtype-tokens
 
-  #   - match: \(
-  #     scope: punctuation.section.flowtype.begin.coffee
-  #     push:
-  #     - match: \)
-  #       scope: punctuation.section.flowtype.end.coffee
-  #       pop: true
-  #     - include: flowtype-tokens
+    #   - match: \(
+    #     scope: punctuation.section.flowtype.begin.coffee
+    #     push:
+    #     - match: \)
+    #       scope: punctuation.section.flowtype.end.coffee
+    #       pop: true
+    #     - include: flowtype-tokens
 
-  #   - match: '=>'
-  #     scope: keyword.operator.flowtype.coffee
-  #     push:
-  #     - meta_scope: meta.flowtype.function.coffee
-  #     - match: (?<=}|[_$a-zA-Z])
-  #       pop: true
-  #     - include: flowtype-brackets
-  #     - include: flowtype-identifier
-  #     - include: comments
+    #   - match: '=>'
+    #     scope: keyword.operator.flowtype.coffee
+    #     push:
+    #     - meta_scope: meta.flowtype.function.coffee
+    #     - match: (?<=}|[_$a-zA-Z])
+    #       pop: true
+    #     - include: flowtype-brackets
+    #     - include: flowtype-identifier
+    #     - include: comments
 
-  #   - include: flowtype-identifier
+    #   - include: flowtype-identifier
     - include: literal-string
     - include: comments
