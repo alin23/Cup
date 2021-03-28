@@ -77,8 +77,9 @@ def _run(cmd, args=[], source="", cwd=None, env=None):
         }
 
     else:
+        existing_path_var = ":{}".format(os.getenv("PATH")) if os.getenv("PATH") else ""
         if env is None:
-            env = {"PATH": settings_get('binDir', '/usr/local/bin')}
+            env = {"PATH": settings_get('binDir', '/usr/local/bin') + existing_path_var}
 
         # adding custom PATHs from settings
         customEnv = settings_get('envPATH', "")
