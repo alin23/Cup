@@ -1320,7 +1320,7 @@ contexts:
   styled-jsx:
     - match: \"#{\s*}
       scope: punctuation.section.style.begin.jsx
-      push: Packages/CSS3/CSS3.sublime-syntax
+      push: Packages/CSS/CSS.sublime-syntax
       with_prototype:
         - match: \"
           scope: punctuation.section.style.end.jsx
