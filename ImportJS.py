@@ -30,8 +30,7 @@ def plugin_loaded():
     global import_js_environment
 
     import_js_environment = dict(os.environ).copy()
-    print("ImportJS loaded with environment:")
-    print(import_js_environment)
+    print("ImportJS loaded")
 
 
 def plugin_unloaded():
