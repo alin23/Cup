@@ -132,7 +132,7 @@ contexts:
     - match: \#
       scope: punctuation.definition.comment.coffee
       push:
-        - meta_scope: comment.line.double-slash.coffee
+        - meta_scope: comment.line.number-sign.coffee
         - match: $\n?
           pop: true
 
