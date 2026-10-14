@@ -59,6 +59,15 @@ def _run(cmd, args=[], source="", cwd=None, env=None):
         args = [args]
     if sys.platform == "win32":
         args = [cmd] + args
+        # honor the binDir and envPATH settings like the other platforms do
+        if env is None:
+            env = dict(os.environ)
+        binDir = settings_get('binDir', "")
+        if binDir:
+            env["PATH"] = binDir + os.pathsep + env.get("PATH", "")
+        customEnv = settings_get('envPATH', "")
+        if customEnv:
+            env["PATH"] = env.get("PATH", "") + os.pathsep + customEnv
         if sys.version_info[0] == 2:
             for i in range(len(args)):
                 args[i] = args[i].encode(locale.getdefaultlocale()[1])
