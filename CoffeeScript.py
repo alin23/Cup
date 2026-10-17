@@ -365,7 +365,7 @@ class RunCakeTaskCommand(WindowCommand):
                 if "No such task" in res["out"]:
                     msg = "doesn't exist"
                 else:
-                    msg = "suceeded"
+                    msg = "succeeded"
             else:
                 print(res["err"])
                 msg = "failed"
